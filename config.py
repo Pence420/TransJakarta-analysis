@@ -13,5 +13,5 @@ DB_CONFIG = {
 
 GTFS_FEED_URL = os.getenv(
     "GTFS_FEED_URL",
-    "https://transitland.com/api/v2/rest/datafeeds/f-transjakarta~id",
+    "https://gtfs.transjakarta.co.id/files/file_gtfs.zip",
 )
