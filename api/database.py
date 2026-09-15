@@ -15,19 +15,9 @@ DB_CONFIG = {
 }
 
 
-def get_db():
-    """Get a read-only database connection."""
-    conn = psycopg2.connect(**DB_CONFIG)
-    conn.set_session(readonly=True, autocommit=True)
-    try:
-        yield conn
-    finally:
-        conn.close()
-
-
 @contextmanager
-def get_db_context():
-    """Context manager for database connection."""
+def get_db():
+    """Context manager for a read-only database connection."""
     conn = psycopg2.connect(**DB_CONFIG)
     conn.set_session(readonly=True, autocommit=True)
     try:

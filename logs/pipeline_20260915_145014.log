@@ -1,0 +1,20 @@
+2026-09-15 21:50:14,861 [INFO] ============================================================
+2026-09-15 21:50:14,861 [INFO] Transjakarta GTFS Pipeline — Starting
+2026-09-15 21:50:14,861 [INFO] Log file: /Users/joshuats/transjakarta/logs/pipeline_20260915_145014.log
+2026-09-15 21:50:14,861 [INFO] ============================================================
+2026-09-15 21:50:14,861 [INFO] 
+--- Running: Extract & Load ---
+2026-09-15 21:50:14,861 [INFO] STEP: Extract & Load
+2026-09-15 21:50:18,593 [ERROR] --- Extract & Load FAILED after 3.7s ---
+2026-09-15 21:50:18,593 [ERROR] Error: permission denied for sequence feed_versions_feed_version_id_seq
+
+2026-09-15 21:50:18,593 [ERROR] Stopping pipeline due to failure.
+2026-09-15 21:50:18,605 [INFO] 
+============================================================
+2026-09-15 21:50:18,605 [INFO] Pipeline Summary
+2026-09-15 21:50:18,605 [INFO] ============================================================
+2026-09-15 21:50:18,605 [ERROR]   Extract & Load: FAILED (3.7s) — permission denied for sequence feed_versions_feed_version_id_seq
+
+2026-09-15 21:50:18,605 [INFO] 
+Total time: 3.7s
+2026-09-15 21:50:18,605 [INFO] ============================================================

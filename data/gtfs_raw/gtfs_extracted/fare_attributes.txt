@@ -1,0 +1,7 @@
+fare_id,price,currency_type,payment_method,transfers,agency_id,transfer_duration
+FP,3500,IDR,0,,Tije,10800
+PP,20000,IDR,0,,Tije,10800
+GR,0,IDR,0,,Tije,10800
+FP2,3500,IDR,0,1,Tije,10800
+PP2,25000,IDR,0,,Tije,10800
+PP3,35000,IDR,0,,Tije,10800

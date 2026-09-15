@@ -1,0 +1,30 @@
+2026-09-15 21:51:35,266 [INFO] ============================================================
+2026-09-15 21:51:35,266 [INFO] Transjakarta GTFS Pipeline — Starting
+2026-09-15 21:51:35,266 [INFO] Log file: /Users/joshuats/transjakarta/logs/pipeline_20260915_145135.log
+2026-09-15 21:51:35,266 [INFO] ============================================================
+2026-09-15 21:51:35,266 [INFO] 
+--- Running: Extract & Load ---
+2026-09-15 21:51:35,266 [INFO] STEP: Extract & Load
+2026-09-15 21:51:40,826 [INFO] --- Extract & Load completed in 5.6s ---
+2026-09-15 21:51:40,826 [INFO] 
+--- Running: CDC Diff ---
+2026-09-15 21:51:40,826 [INFO] STEP: CDC Diff
+2026-09-15 21:51:44,851 [INFO] --- CDC Diff completed in 4.0s ---
+2026-09-15 21:51:44,851 [INFO] 
+--- Running: Transform ---
+2026-09-15 21:51:44,851 [INFO] STEP: Transform
+2026-09-15 21:52:16,169 [ERROR] --- Transform FAILED after 31.3s ---
+2026-09-15 21:52:16,169 [ERROR] Error: integer out of range
+
+2026-09-15 21:52:16,169 [ERROR] Stopping pipeline due to failure.
+2026-09-15 21:52:16,169 [INFO] 
+============================================================
+2026-09-15 21:52:16,169 [INFO] Pipeline Summary
+2026-09-15 21:52:16,169 [INFO] ============================================================
+2026-09-15 21:52:16,169 [INFO]   Extract & Load: SUCCESS (5.6s)
+2026-09-15 21:52:16,169 [INFO]   CDC Diff: SUCCESS (4.0s)
+2026-09-15 21:52:16,169 [ERROR]   Transform: FAILED (31.3s) — integer out of range
+
+2026-09-15 21:52:16,169 [INFO] 
+Total time: 40.9s
+2026-09-15 21:52:16,169 [INFO] ============================================================

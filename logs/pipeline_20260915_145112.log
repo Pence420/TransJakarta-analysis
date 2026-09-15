@@ -1,0 +1,36 @@
+2026-09-15 21:51:12,758 [INFO] ============================================================
+2026-09-15 21:51:12,758 [INFO] Transjakarta GTFS Pipeline — Starting
+2026-09-15 21:51:12,758 [INFO] Log file: /Users/joshuats/transjakarta/logs/pipeline_20260915_145112.log
+2026-09-15 21:51:12,758 [INFO] ============================================================
+2026-09-15 21:51:12,758 [INFO] 
+--- Running: Extract & Load ---
+2026-09-15 21:51:12,758 [INFO] STEP: Extract & Load
+2026-09-15 21:51:18,092 [INFO] --- Extract & Load completed in 5.3s ---
+2026-09-15 21:51:18,093 [INFO] 
+--- Running: CDC Diff ---
+2026-09-15 21:51:18,093 [INFO] STEP: CDC Diff
+2026-09-15 21:51:22,064 [INFO] --- CDC Diff completed in 4.0s ---
+2026-09-15 21:51:22,064 [INFO] 
+--- Running: Transform ---
+2026-09-15 21:51:22,064 [INFO] STEP: Transform
+2026-09-15 21:51:23,611 [ERROR] --- Transform FAILED after 1.5s ---
+2026-09-15 21:51:23,611 [ERROR] Error: column a.stop_id does not exist
+LINE 203:         AND a.stop_id = b.stop_id
+                      ^
+HINT:  Perhaps you meant to reference the column "a.trip_id".
+
+2026-09-15 21:51:23,611 [ERROR] Stopping pipeline due to failure.
+2026-09-15 21:51:23,611 [INFO] 
+============================================================
+2026-09-15 21:51:23,611 [INFO] Pipeline Summary
+2026-09-15 21:51:23,611 [INFO] ============================================================
+2026-09-15 21:51:23,611 [INFO]   Extract & Load: SUCCESS (5.3s)
+2026-09-15 21:51:23,611 [INFO]   CDC Diff: SUCCESS (4.0s)
+2026-09-15 21:51:23,611 [ERROR]   Transform: FAILED (1.5s) — column a.stop_id does not exist
+LINE 203:         AND a.stop_id = b.stop_id
+                      ^
+HINT:  Perhaps you meant to reference the column "a.trip_id".
+
+2026-09-15 21:51:23,611 [INFO] 
+Total time: 10.9s
+2026-09-15 21:51:23,611 [INFO] ============================================================

@@ -1,0 +1,241 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,ticketing_deep_link_id
+BW2,Tije,BW2,Monas Explorer,Bus Wisata,3,,FFB6DB,000000,0,tdl-tj
+8K,Tije,8K,Batusari - Grogol,Angkutan Umum Integrasi,3,,DD6AAB,000000,0,tdl-tj
+1W,Tije,1W,Blok M - Ancol,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+11W,Tije,11W,St. Klender - Pulo Gadung via JIEP,Angkutan Umum Integrasi,3,,504f92,FFFFFF,0,tdl-tj
+4K,Tije,4K,Pulo Gadung - Kejaksaan Agung,Angkutan Umum Integrasi,3,,512C62,FFFFFF,0,tdl-tj
+JAK.79,Tije,JAK.79,Cengkareng - Tubagus Angke,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+2P,Tije,2P,Stasiun Gondangdia - Pasar Senen,Angkutan Umum Integrasi,3,,54659C,FFFFFF,0,tdl-tj
+JAK.107,Tije,JAK.107,Jembatan Garden - Puri Beta,Mikrotrans,3,,00609c,FFFFFF,0,tdl-tj
+T31,Tije,T31,PIK 2 - Blok M,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+B51,Tije,B51,Cikarang - Cawang,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+8N,Tije,8N,Kebayoran - Petamburan via Asia Afrika,Angkutan Umum Integrasi,3,,dd6aab,000000,0,tdl-tj
+P11,Tije,P11,Bogor - Blok M,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+B41,Tije,B41,Vida Bekasi - Cawang Sentral via Jatiasih,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+S61,Tije,S61,Alam Sutera - Blok M,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+D41,Tije,D41,Sawangan - Lebak Bulus via Tol Desari,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+10,Tije,10,Tanjung Priok - PGC,BRT,3,,9b1f21,FFFFFF,0,tdl-tj
+JAK.78A,Tije,JAK.78A,Benda - Cengkareng Timur,Mikrotrans,3,,00609c,FFFFFF,0,tdl-tj
+B25,Tije,B25,Bekasi - Dukuh Atas,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+JAK.78B,Tije,JAK.78B,Jembatan Tiga - Teluk Gong,Mikrotrans,3,,00609c,FFFFFF,0,tdl-tj
+JAK.28,Tije,JAK.28,Pasar Rebo - St. LRT Harjamukti via Bulak Sereh,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.73,Tije,JAK.73,Pasar Rebo - St. LRT Harjamukti via Jln. Kiwi,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+11C,Tije,11C,Rusun Pulo Gebang - Penggilingan,Rusun,3,,717092,FFFFFF,0,tdl-tj
+13,Tije,13,Ciledug - Tegal Mampang,BRT,3,,7A357B,FFFFFF,0,tdl-tj
+2,Tije,2,Pulo Gadung - Monumen Nasional,BRT,3,,2F489C,FFFFFF,0,tdl-tj
+13B,Tije,13B,Puri Beta - Pancoran,BRT,3,,7A357B,FFFFFF,0,tdl-tj
+13E,Tije,13E,Puri Beta - Flyover Kuningan,BRT,3,,7A357B,FFFFFF,0,tdl-tj
+11R,Tije,11R,Rusun Cakung KM 2 - Penggilingan via Rusun PIK,Rusun,3,,717092,FFFFFF,0,tdl-tj
+3,Tije,3,Kalideres - Monumen Nasional via Veteran,BRT,3,,FDCB1C,000000,0,tdl-tj
+3D,Tije,3D,Taman Kota - Penjaringan via Tubagus Angke,Angkutan Umum Integrasi,3,,FDDB6A,000000,0,tdl-tj
+10H,Tije,10H,Tanjung Priok - Bundaran Senayan,BRT,3,,9B1F21,FFFFFF,0,tdl-tj
+1,Tije,1,Blok M - Kota,BRT,3,,D62126,FFFFFF,0,tdl-tj
+4,Tije,4,Pulo Gadung - Galunggung,BRT,3,,512C62,FFFFFF,0,tdl-tj
+5,Tije,5,Kampung Melayu - Ancol,BRT,3,,D46425,000000,0,tdl-tj
+6,Tije,6,Ragunan - Galunggung,BRT,3,,1BAC47,FFFFFF,0,tdl-tj
+7,Tije,7,Kampung Rambutan - Kampung Melayu,BRT,3,,914900,FFFFFF,0,tdl-tj
+8,Tije,8,Lebak Bulus - Pasar Baru,BRT,3,,DD3393,FFFFFF,0,tdl-tj
+9,Tije,9,Pinang Ranti - Pluit,BRT,3,,45A49E,FFFFFF,0,tdl-tj
+11,Tije,11,Pulo Gebang - Kampung Melayu,BRT,3,,312F92,FFFFFF,0,tdl-tj
+12,Tije,12,Tanjung Priok - Pluit,BRT,3,,7ABF7C,000000,0,tdl-tj
+14,Tije,14,Jakarta International Stadium - Senen,BRT,3,,F5AB6E,000000,0,tdl-tj
+10A,Tije,10A,Rusun Marunda - Tanjung Priok,Rusun,3,,9B7172,000000,0,tdl-tj
+10B,Tije,10B,Rusun Cipinang Besar Selatan - Halim,Rusun,3,,9B7172,000000,0,tdl-tj
+11B,Tije,11B,Rusun Rawa Bebek - Penggilingan,Rusun,3,,717092,FFFFFF,0,tdl-tj
+11D,Tije,11D,Pulo Gebang - Pulo Gadung via PIK,Angkutan Umum Integrasi,3,,504F92,FFFFFF,0,tdl-tj
+11M,Tije,11M,Rusun Rawa Bebek - Bukit Duri,Rusun,3,,717092,FFFFFF,0,tdl-tj
+11P,Tije,11P,Rusun Pondok Bambu - Walikota Jakarta Timur,Rusun,3,,717092,FFFFFF,0,tdl-tj
+11Q,Tije,11Q,Kampung Melayu - Pulo Gebang via BKT,Angkutan Umum Integrasi,3,,504F92,FFFFFF,0,tdl-tj
+12A,Tije,12A,Pelabuhan Kaliadem - Kota,Angkutan Umum Integrasi,3,,91BF91,000000,0,tdl-tj
+12B,Tije,12B,Pluit - Senen,Angkutan Umum Integrasi,3,,91BF91,000000,0,tdl-tj
+12C,Tije,12C,Rusun Waduk Pluit - Penjaringan,Rusun,3,,A8BFA8,000000,0,tdl-tj
+12F,Tije,12F,Rusun Marunda - Rusun Waduk Pluit,Rusun,3,,A8BFA8,000000,0,tdl-tj
+12H,Tije,12H,Rusun Penjaringan - Penjaringan,Rusun,3,,A8BFA8,000000,0,tdl-tj
+12P,Tije,12P,St. LRT Pegangsaan Dua - JIS,Angkutan Umum Integrasi,3,,91BF91,000000,0,tdl-tj
+1A,Tije,1A,Pantai Maju - Balai Kota,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1C,Tije,1C,Pesanggrahan - Blok M,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1E,Tije,1E,Pondok Labu - Blok M,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1F,Tije,1F,Stasiun Palmerah - Bundaran Senayan,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1H,Tije,1H,Tanah Abang - Stasiun Gondangdia,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1M,Tije,1M,Meruya - Blok M,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1P,Tije,1P,Senen - Blok M,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1Q,Tije,1Q,Rempoa - Blok M,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1R,Tije,1R,Senen - Tanah Abang,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+1T,Tije,1T,Cibubur - Balai Kota,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+2A,Tije,2A,Pulo Gadung - Rawa Buaya via Balai Kota,BRT,3,,2F489C,FFFFFF,0,tdl-tj
+2B,Tije,2B,Harapan Indah - Pulo Gadung,Angkutan Umum Integrasi,3,,54659C,FFFFFF,0,tdl-tj
+2F,Tije,2F,Rusun Cakung Barat - Pulo Gadung,Rusun,3,,78809C,000000,0,tdl-tj
+2H,Tije,2H,Rusun Jati Rawasari - Senen,Rusun,3,,78809C,000000,0,tdl-tj
+2Q,Tije,2Q,Gondangdia - Balai Kota,Angkutan Umum Integrasi,3,,54659C,FFFFFF,0,tdl-tj
+3A,Tije,3A,Rusun Pesakih - Kalideres,Rusun,3,,FDECB4,000000,0,tdl-tj
+3B,Tije,3B,Rusun Flamboyan - Cengkareng,Rusun,3,,FDECB4,000000,0,tdl-tj
+3C,Tije,3C,Rusun Kapuk Muara - Penjaringan,Rusun,3,,FDECB4,000000,0,tdl-tj
+3E,Tije,3E,Puri Kembangan - Sentraland Cengkareng,Angkutan Umum Integrasi,3,,FDDB6A,000000,0,tdl-tj
+4B,Tije,4B,Stasiun Manggarai - UI,Angkutan Umum Integrasi,3,,553C62,FFFFFF,0,tdl-tj
+4D,Tije,4D,Pulo Gadung - Kuningan,BRT,3,,512C62,FFFFFF,0,tdl-tj
+4E,Tije,4E,Rusun Jatinegara Kaum - Pulo Gadung,Rusun,3,,5C5062,FFFFFF,0,tdl-tj
+4F,Tije,4F,Pinang Ranti - Pulo Gadung,Angkutan Umum Integrasi,3,,553C62,FFFFFF,0,tdl-tj
+5B,Tije,5B,Stasiun Tebet - Bidara Cina,Angkutan Umum Integrasi,3,,D48961,000000,0,tdl-tj
+5C,Tije,5C,Cililitan - Juanda,BRT,3,,D46425,000000,0,tdl-tj
+5F,Tije,5F,Kampung Melayu - Tanah Abang,Angkutan Umum Integrasi,3,,D48961,000000,0,tdl-tj
+5M,Tije,5M,Kampung Melayu - Tanah Abang via Cikini,Angkutan Umum Integrasi,3,,D48961,000000,0,tdl-tj
+5N,Tije,5N,Kampung Melayu - Ragunan,Angkutan Umum Integrasi,3,,D48961,000000,0,tdl-tj
+6A,Tije,6A,Ragunan - Balai Kota via Kuningan,BRT,3,,1BAC47,FFFFFF,0,tdl-tj
+6B,Tije,6B,Ragunan - Balai Kota via Semanggi,BRT,3,,1BAC47,FFFFFF,0,tdl-tj
+6C,Tije,6C,Stasiun Tebet - Kuningan,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6D,Tije,6D,Stasiun Tebet - Bundaran Senayan,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6H,Tije,6H,Senen - Lebak Bulus,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6K,Tije,6K,Kuningan - Karet,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+3F,Tije,3F,Kalideres - Senayan Bank Jakarta,BRT,3,,FDCB1C,000000,0,tdl-tj
+3H,Tije,3H,Damai - Kota,BRT,3,,FDCB1C,000000,0,tdl-tj
+14A,Tije,14A,Monumen Nasional - Jakarta International Stadium,Angkutan Umum Integrasi,3,,F5AB6E,000000,0,tdl-tj
+1B,Tije,1B,Stasiun Palmerah - Transport Hub Dukuh Atas,Angkutan Umum Integrasi,3,,D65E62,000000,0,tdl-tj
+4C,Tije,4C,JIEP - Bundaran Senayan,Angkutan Umum Integrasi,3,,553C62,FFFFFF,0,tdl-tj
+1K,Tije,1K,Cibubur Junction - Blok M,Royaltrans,3,,9c4782,FFFFFF,0,tdl-tj
+14B,Tije,14B,Tanjung Priok - Senen via JIS,Angkutan Umum Integrasi,3,,f5ab6e,000000,0,tdl-tj
+6M,Tije,6M,Stasiun Manggarai - Blok M,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6N,Tije,6N,Ragunan - Blok M via Kemang,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6P,Tije,6P,Cibubur - Kuningan,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+6Q,Tije,6Q,Galunggung - Casablanca via Epicentrum Raya,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6U,Tije,6U,Blok M - Pasar Minggu,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6W,Tije,6W,Duren Tiga - Blok M via Bangka Raya,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+7A,Tije,7A,Kampung Rambutan - Lebak Bulus,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7B,Tije,7B,Kampung Rambutan - Blok M,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7C,Tije,7C,Cibubur - Cawang Cililitan,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7E,Tije,7E,Kampung Rambutan - Ragunan,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7F,Tije,7F,Kampung Rambutan - Juanda via Cempaka Putih,BRT,3,,914900,FFFFFF,0,tdl-tj
+7R,Tije,7R,Cibubur - Pluit,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7T,Tije,7T,Cibubur - Tanjung Priok,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7U,Tije,7U,Cibubur - Ancol,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7V,Tije,7V,Cibubur - Kampung Rambutan,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7W,Tije,7W,Cawang - St. Kereta Cepat Halim,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+8A,Tije,8A,Jelambar - Juanda,BRT,3,,DD3393,FFFFFF,0,tdl-tj
+8C,Tije,8C,Kebayoran - Tanah Abang,Angkutan Umum Integrasi,3,,DD6AAB,000000,0,tdl-tj
+8E,Tije,8E,Bintaro - Blok M,Angkutan Umum Integrasi,3,,DD6AAB,000000,0,tdl-tj
+8M,Tije,8M,Tanjung Duren - Tanah Abang,Angkutan Umum Integrasi,3,,DD6AAB,000000,0,tdl-tj
+9A,Tije,9A,Cililitan - Grogol,BRT,3,,45A49E,FFFFFF,0,tdl-tj
+9C,Tije,9C,Pinang Ranti - Bundaran Senayan,BRT,3,,45A49E,FFFFFF,0,tdl-tj
+9D,Tije,9D,Pasar Minggu - Tanah Abang,Angkutan Umum Integrasi,3,,66A4A0,FFFFFF,0,tdl-tj
+9E,Tije,9E,Kebayoran Lama - Jelambar,Angkutan Umum Integrasi,3,,66A4A0,FFFFFF,0,tdl-tj
+9F,Tije,9F,Rusun Tambora - Pluit,Rusun,3,,85A4A2,000000,0,tdl-tj
+9H,Tije,9H,Cipedak - Pasar Minggu,Angkutan Umum Integrasi,3,,66A4A0,FFFFFF,0,tdl-tj
+B14,Tije,B14,Bekasi Barat - Kuningan,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+B21,Tije,B21,Bekasi Timur - Cawang,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+BW1,Tije,BW1,Sejarah Jakarta,Bus Wisata,3,,FFB6DB,000000,0,tdl-tj
+BW4,Tije,BW4,Pencakar Langit,Bus Wisata,3,,FFB6DB,000000,0,tdl-tj
+D11,Tije,D11,Depok - Cawang Sentral via Cibubur,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+D21,Tije,D21,Universitas Indonesia - Lebak Bulus,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+7P,Tije,7P,Pondok Kelapa - Cawang Cililitan,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+7D,Tije,7D,TMII - Pancoran,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+6T,Tije,6T,Pasar Minggu - Velbak,Angkutan Umum Integrasi,3,,4CAC67,000000,0,tdl-tj
+6V,Tije,6V,Ragunan - Senayan Bank Jakarta,BRT,3,,1BAC47,FFFFFF,0,tdl-tj
+8D,Tije,8D,Joglo - Blok M via Meruya Selatan,Angkutan Umum Integrasi,3,,DD6AAB,000000,0,tdl-tj
+B11,Tije,B11,Bekasi Barat - Cawang,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+B13,Tije,B13,Summarecon Bekasi - Blok M,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+9N,Tije,9N,Pinang Ranti - Simpang Cawang,BRT,3,,66a4a0,FFFFFF,0,tdl-tj
+7Q,Tije,7Q,Blok M - Cawang Cililitan,Angkutan Umum Integrasi,3,,916131,FFFFFF,0,tdl-tj
+D31,Tije,D31,Cinere - Kuningan,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+D32,Tije,D32,Cinere - Bundaran Senayan,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+JAK.01,Tije,JAK.01,Tanjung Priok - Plumpang,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.02,Tije,JAK.02,Kampung Melayu - Duren Sawit,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.03,Tije,JAK.03,Lebak Bulus - Andara,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.04,Tije,JAK.04,Grogol - Tubagus Angke,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.05,Tije,JAK.05,Semper - Rorotan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.06,Tije,JAK.06,Kampung Rambutan - Pondok Gede,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.07,Tije,JAK.07,Tanah Abang - Grogol via Tawakal,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.10,Tije,JAK.10,Tanah Abang - Kota,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.100,Tije,JAK.100,Term. Pulo Gebang - Rusun Pinus Elok,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.102,Tije,JAK.102,Blok M - Lebak Bulus,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.106,Tije,JAK.106,Term. Kampung Melayu - Term. Klender,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.108,Tije,JAK.108,Kramat Jati - Bambu Apus,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.10A,Tije,JAK.10A,Gondangdia - Cikini via Salemba Raya,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.10B,Tije,JAK.10B,Gondangdia - Cikini via Kramat Raya,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.11,Tije,JAK.11,Tanah Abang - Kebayoran Lama,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.110A,Tije,JAK.110A,Rusun Marunda - Terminal Terpadu Pulo Gebang,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.09,Tije,JAK.09,Tanah Abang - Karet via Roxy,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.112,Tije,JAK.112,Terminal Tanah Merah - Pulo Gadung,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.115,Tije,JAK.115,Term. Tj. Priok - Pegangsaan II IGI,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.117,Tije,JAK.117,Tanjung Priok - Tanah Merdeka,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.12,Tije,JAK.12,Tanah Abang - Kebayoran Lama via Pos Pengumben,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.120,Tije,JAK.120,JIS - Term. Muara Angke,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.13,Tije,JAK.13,Tanah Abang - Jembatan Lima,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.14,Tije,JAK.14,Tanah Abang - Meruya,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.15,Tije,JAK.15,Terminal Tanjung Priok - Rusun Marunda,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.16,Tije,JAK.16,Cililitan - Condet,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.17,Tije,JAK.17,Senen - Pulo Gadung,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.18,Tije,JAK.18,Kalibata - Kuningan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.19,Tije,JAK.19,Pinang Ranti - Kampung Rambutan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.20,Tije,JAK.20,Cawang Sentral - Lubang Buaya,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.21,Tije,JAK.21,Cililitan - Dwikora,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.22,Tije,JAK.22,Dwikora - Halim,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.23,Tije,JAK.23,Senen - Pisangan Baru,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.24,Tije,JAK.24,Senen - Pulo Gadung via Kelapa Gading,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.26,Tije,JAK.26,Rawamangun - Duren Sawit,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.27,Tije,JAK.27,Pulo Gebang - Rorotan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.29,Tije,JAK.29,Tanjung Priok - Sukapura,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.30,Tije,JAK.30,Grogol - Meruya via Roxy,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.31,Tije,JAK.31,Blok M - Andara,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.118,Tije,JAK.118,Waduk Papanggo - Kota Tua,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.105,Tije,JAK.105,Stasiun Tebet - Cipinang Muara,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.25,Tije,JAK.25,Pasar Rebo - Kalisari,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.32,Tije,JAK.32,Joglo - Lebak Bulus,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.33,Tije,JAK.33,Pulo Gadung - Kota,Mikrotrans,3,,00609c,FFFFFF,0,tdl-tj
+JAK.34,Tije,JAK.34,Rawamangun - Klender,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.35,Tije,JAK.35,Pangkalan Jati - Rawamangun,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.36,Tije,JAK.36,Cilangkap - Cililitan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.37,Tije,JAK.37,Cililitan - Condet via Kayu Manis,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.38,Tije,JAK.38,Bulak Ringin - Kampung Rambutan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.39,Tije,JAK.39,Kalimalang - Duren Sawit,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.40,Tije,JAK.40,Harapan Baru - Pulo Gebang via Rawa Kuning,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.41,Tije,JAK.41,Kampung Melayu - Pulo Gadung,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.42,Tije,JAK.42,Kampung Melayu - Pondok Kelapa,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.43B,Tije,JAK.43B,Tongtek - Tebet Eco Park (TEP) - Cililitan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.43C,Tije,JAK.43C,Sarana Jaya - Tebet Eco Park (TEP) - Stasiun Cawang,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.44,Tije,JAK.44,Andara - Stasiun Universitas Pancasila,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.45,Tije,JAK.45,Lebak Bulus - Ragunan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.46,Tije,JAK.46,Pasar Minggu - Jagakarsa,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.47,Tije,JAK.47,Pasar Minggu - Ciganjur via KB Ragunan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.48A,Tije,JAK.48A,Stasiun Tebet - Karet,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.49,Tije,JAK.49,Lebak Bulus - Cipulir,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.50,Tije,JAK.50,Kalideres - Puri Kembangan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.51,Tije,JAK.51,Taman Kota - Budi Luhur,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.52,Tije,JAK.52,Kalideres - Muara Angke,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.53,Tije,JAK.53,Grogol - Pos Pengumben via Slipi,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.54,Tije,JAK.54,Grogol - Benhil,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.60,Tije,JAK.60,Kelapa Gading - Rusun Kemayoran,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.61,Tije,JAK.61,Cempaka Putih - Pulo Gadung via Kelapa Gading,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.64,Tije,JAK.64,Lenteng Agung - Aseli,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.71,Tije,JAK.71,Kampung Rambutan - Pinang Ranti,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.72,Tije,JAK.72,Kampung Rambutan - Pasar Rebo via Poncol,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.74,Tije,JAK.74,Terminal Rawamangun - Cipinang Muara,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.75,Tije,JAK.75,Cililitan - Kampung Pulo,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.76,Tije,JAK.76,Jln. Industri Raya - Perintis Kemerdekaan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.77,Tije,JAK.77,Tanjung Priok - Jembatan Item,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.56,Tije,JAK.56,Pesing - Srengseng,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.80,Tije,JAK.80,Rawa Buaya - Rawa Kompeni,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.84,Tije,JAK.84,Terminal Kampung Melayu - Kapin Raya,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.85,Tije,JAK.85,Bintara - Cipinang Indah,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.86,Tije,JAK.86,Term. Rawamangun - Term. Manggarai,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.87,Tije,JAK.87,Terminal Tanjung Priok - Terminal Rawamangun,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.88,Tije,JAK.88,Terminal Tanjung Priok - Ancol Barat,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.89,Tije,JAK.89,Terminal Tanjung Priok - Taman Kota Intan,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.90,Tije,JAK.90,Terminal Tanjung Priok - Rusun Kemayoran,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.93,Tije,JAK.93,Jeruk Purut - Kebayoran Lama,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.95,Tije,JAK.95,Term. Lebak Bulus - Term. Pasar Minggu,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.99,Tije,JAK.99,Term. Pulo Gadung - Lampiri,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.58,Tije,JAK.58,Cilincing - Rusun Padat Karya,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.59,Tije,JAK.59,Rawamangun - Rawa Sengon,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.98,Tije,JAK.98,Pasar Rebo - Munjul,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+L13E,Tije,L13E,Puri Beta - Flyover Kuningan (Express),BRT,3,,7A357B,FFFFFF,0,tdl-tj
+S11,Tije,S11,BSD - Jelambar,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+S12,Tije,S12,Term. BSD - Fatmawati,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+S14,Tije,S14,Summarecon Serpong - Lebak Bulus,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+S21,Tije,S21,Ciputat - CSW,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+S22,Tije,S22,Ciputat - Kampung Rambutan,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+S31,Tije,S31,Bintaro - Fatmawati,Royaltrans,3,,9C4782,FFFFFF,0,tdl-tj
+SH1,Tije,SH1,Kalideres - Perkantoran Soekarno-Hatta,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+T11,Tije,T11,Poris Plawad - Petamburan,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+T12,Tije,T12,Poris Plawad - Juanda,Transjabodetabek,3,,FFFF6D,000000,0,tdl-tj
+SH2,Tije,SH2,Blok M - Bandara Soekarno-Hatta,Transjabodetabek,3,,ffff6d,000000,0,tdl-tj
+JAK.113,Tije,JAK.113,Tanah Merdeka - Kampung Sawah,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj
+JAK.08,Tije,JAK.08,Tanah Abang - Benhil via Roxy,Mikrotrans,3,,00609C,FFFFFF,0,tdl-tj

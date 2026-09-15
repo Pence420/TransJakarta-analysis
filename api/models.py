@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -60,7 +62,7 @@ class ServiceSpanResponse(BaseModel):
 
 class FeedVersionResponse(BaseModel):
     feed_version_id: int
-    fetch_timestamp: str
+    fetch_timestamp: datetime
     file_hash: str
     file_size_bytes: int | None
 

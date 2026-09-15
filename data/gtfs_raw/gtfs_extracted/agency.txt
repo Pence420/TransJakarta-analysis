@@ -1,0 +1,2 @@
+agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_email,ticketing_deep_link_id
+Tije,Transjakarta,https://transjakarta.co.id/,Asia/Jakarta,id,1500102,naektije@transjakarta.co.id,tdl-tj

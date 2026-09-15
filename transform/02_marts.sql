@@ -27,7 +27,7 @@ WHERE feed_version_id = (SELECT MAX(feed_version_id) FROM staging.routes);
 
 ALTER TABLE marts.dim_route ADD PRIMARY KEY (route_id);
 
--- dim_stop: latest snapshot of each stop with geometry
+-- dim_stop: latest snapshot of each stop
 DROP TABLE IF EXISTS marts.dim_stop CASCADE;
 CREATE TABLE marts.dim_stop AS
 SELECT
@@ -37,7 +37,6 @@ SELECT
     stop_desc,
     stop_lat,
     stop_lon,
-    ST_SetSRID(ST_MakePoint(stop_lon, stop_lat), 4326)::geometry(Point, 4326) AS geom,
     zone_id,
     stop_url,
     location_type,
@@ -51,7 +50,8 @@ WHERE feed_version_id = (SELECT MAX(feed_version_id) FROM staging.stops)
   AND stop_lat IS NOT NULL AND stop_lon IS NOT NULL;
 
 ALTER TABLE marts.dim_stop ADD PRIMARY KEY (stop_id);
-CREATE INDEX IF NOT EXISTS idx_dim_stop_geom ON marts.dim_stop USING GIST (geom);
+CREATE INDEX IF NOT EXISTS idx_dim_stop_lat ON marts.dim_stop(stop_lat);
+CREATE INDEX IF NOT EXISTS idx_dim_stop_lon ON marts.dim_stop(stop_lon);
 
 -- dim_time: service calendar expansion
 DROP TABLE IF EXISTS marts.dim_time CASCADE;
@@ -174,6 +174,7 @@ WITH trip_departures AS (
         t.route_id,
         t.trip_id,
         t.service_id,
+        st.stop_id,
         st.departure_time,
         st.stop_sequence,
         ROW_NUMBER() OVER (
@@ -193,30 +194,36 @@ consecutive_pairs AS (
         a.service_id,
         a.departure_time AS dep_a,
         b.departure_time AS dep_b,
-        EXTRACT(EPOCH FROM (
-            TO_TIMESTAMP(b.departure_time, 'HH24:MI:SS') -
-            TO_TIMESTAMP(a.departure_time, 'HH24:MI:SS')
-        )) / 60.0 AS gap_minutes
+        ((SPLIT_PART(b.departure_time, ':', 1)::int * 3600 +
+          SPLIT_PART(b.departure_time, ':', 2)::int * 60 +
+          SPLIT_PART(b.departure_time, ':', 3)::int) -
+         (SPLIT_PART(a.departure_time, ':', 1)::int * 3600 +
+          SPLIT_PART(a.departure_time, ':', 2)::int * 60 +
+          SPLIT_PART(a.departure_time, ':', 3)::int)) / 60.0 AS gap_minutes
     FROM trip_departures a
     JOIN trip_departures b
         ON a.route_id = b.route_id
         AND a.stop_id = b.stop_id
         AND a.service_id = b.service_id
         AND b.seq_num = a.seq_num + 1
-    WHERE EXTRACT(EPOCH FROM (
-        TO_TIMESTAMP(b.departure_time, 'HH24:MI:SS') -
-        TO_TIMESTAMP(a.departure_time, 'HH24:MI:SS')
-    )) > 0
-      AND EXTRACT(EPOCH FROM (
-        TO_TIMESTAMP(b.departure_time, 'HH24:MI:SS') -
-        TO_TIMESTAMP(a.departure_time, 'HH24:MI:SS')
-    )) < 120  -- filter outliers > 2 hours
+    WHERE ((SPLIT_PART(b.departure_time, ':', 1)::int * 3600 +
+            SPLIT_PART(b.departure_time, ':', 2)::int * 60 +
+            SPLIT_PART(b.departure_time, ':', 3)::int) -
+           (SPLIT_PART(a.departure_time, ':', 1)::int * 3600 +
+            SPLIT_PART(a.departure_time, ':', 2)::int * 60 +
+            SPLIT_PART(a.departure_time, ':', 3)::int)) > 0
+      AND ((SPLIT_PART(b.departure_time, ':', 1)::int * 3600 +
+            SPLIT_PART(b.departure_time, ':', 2)::int * 60 +
+            SPLIT_PART(b.departure_time, ':', 3)::int) -
+           (SPLIT_PART(a.departure_time, ':', 1)::int * 3600 +
+            SPLIT_PART(a.departure_time, ':', 2)::int * 60 +
+            SPLIT_PART(a.departure_time, ':', 3)::int)) < 7200  -- filter outliers > 2 hours (in seconds)
 )
 SELECT
     cp.route_id,
     r.route_short_name,
     r.route_long_name,
-    EXTRACT(HOUR FROM TO_TIMESTAMP(cp.dep_a, 'HH24:MI:SS'))::int AS service_hour,
+    SPLIT_PART(cp.dep_a, ':', 1)::int AS service_hour,
     ROUND(AVG(cp.gap_minutes)::numeric, 1) AS avg_headway_minutes,
     ROUND(MIN(cp.gap_minutes)::numeric, 1) AS min_headway_minutes,
     ROUND(MAX(cp.gap_minutes)::numeric, 1) AS max_headway_minutes,
@@ -224,7 +231,7 @@ SELECT
 FROM consecutive_pairs cp
 JOIN marts.dim_route r ON cp.route_id = r.route_id
 GROUP BY cp.route_id, r.route_short_name, r.route_long_name,
-         EXTRACT(HOUR FROM TO_TIMESTAMP(cp.dep_a, 'HH24:MI:SS'))
+         SPLIT_PART(cp.dep_a, ':', 1)::int
 ORDER BY cp.route_id, service_hour;
 
 ALTER TABLE marts.mart_headway_by_route_hour
@@ -237,7 +244,9 @@ WITH parsed_times AS (
     SELECT
         t.route_id,
         st.departure_time,
-        EXTRACT(EPOCH FROM TO_TIMESTAMP(st.departure_time, 'HH24:MI:SS'))::int AS seconds
+        (SPLIT_PART(st.departure_time, ':', 1)::int * 3600 +
+         SPLIT_PART(st.departure_time, ':', 2)::int * 60 +
+         SPLIT_PART(st.departure_time, ':', 3)::int) AS seconds
     FROM staging.trips t
     JOIN staging.stop_times st ON t.trip_id = st.trip_id AND t.feed_version_id = st.feed_version_id
     WHERE t.feed_version_id = (SELECT MAX(feed_version_id) FROM staging.trips)

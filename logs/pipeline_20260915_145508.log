@@ -1,0 +1,30 @@
+2026-09-15 21:55:08,882 [INFO] ============================================================
+2026-09-15 21:55:08,882 [INFO] Transjakarta GTFS Pipeline — Starting
+2026-09-15 21:55:08,882 [INFO] Log file: /Users/joshuats/transjakarta/logs/pipeline_20260915_145508.log
+2026-09-15 21:55:08,882 [INFO] ============================================================
+2026-09-15 21:55:08,882 [INFO] 
+--- Running: Extract & Load ---
+2026-09-15 21:55:08,882 [INFO] STEP: Extract & Load
+2026-09-15 21:55:14,830 [INFO] --- Extract & Load completed in 5.9s ---
+2026-09-15 21:55:14,830 [INFO] 
+--- Running: CDC Diff ---
+2026-09-15 21:55:14,830 [INFO] STEP: CDC Diff
+2026-09-15 21:55:18,920 [INFO] --- CDC Diff completed in 4.1s ---
+2026-09-15 21:55:18,920 [INFO] 
+--- Running: Transform ---
+2026-09-15 21:55:18,920 [INFO] STEP: Transform
+2026-09-15 21:55:21,031 [ERROR] --- Transform FAILED after 2.1s ---
+2026-09-15 21:55:21,031 [ERROR] Error: must be owner of table dim_route
+
+2026-09-15 21:55:21,031 [ERROR] Stopping pipeline due to failure.
+2026-09-15 21:55:21,031 [INFO] 
+============================================================
+2026-09-15 21:55:21,031 [INFO] Pipeline Summary
+2026-09-15 21:55:21,031 [INFO] ============================================================
+2026-09-15 21:55:21,031 [INFO]   Extract & Load: SUCCESS (5.9s)
+2026-09-15 21:55:21,031 [INFO]   CDC Diff: SUCCESS (4.1s)
+2026-09-15 21:55:21,032 [ERROR]   Transform: FAILED (2.1s) — must be owner of table dim_route
+
+2026-09-15 21:55:21,032 [INFO] 
+Total time: 12.1s
+2026-09-15 21:55:21,032 [INFO] ============================================================

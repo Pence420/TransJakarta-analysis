@@ -1,0 +1,30 @@
+2026-09-15 21:50:30,770 [INFO] ============================================================
+2026-09-15 21:50:30,770 [INFO] Transjakarta GTFS Pipeline — Starting
+2026-09-15 21:50:30,770 [INFO] Log file: /Users/joshuats/transjakarta/logs/pipeline_20260915_145030.log
+2026-09-15 21:50:30,770 [INFO] ============================================================
+2026-09-15 21:50:30,770 [INFO] 
+--- Running: Extract & Load ---
+2026-09-15 21:50:30,770 [INFO] STEP: Extract & Load
+2026-09-15 21:50:36,423 [INFO] --- Extract & Load completed in 5.7s ---
+2026-09-15 21:50:36,423 [INFO] 
+--- Running: CDC Diff ---
+2026-09-15 21:50:36,423 [INFO] STEP: CDC Diff
+2026-09-15 21:50:36,428 [INFO] --- CDC Diff completed in 0.0s ---
+2026-09-15 21:50:36,428 [INFO] 
+--- Running: Transform ---
+2026-09-15 21:50:36,428 [INFO] STEP: Transform
+2026-09-15 21:50:36,431 [ERROR] --- Transform FAILED after 0.0s ---
+2026-09-15 21:50:36,432 [ERROR] Error: permission denied for schema staging
+
+2026-09-15 21:50:36,432 [ERROR] Stopping pipeline due to failure.
+2026-09-15 21:50:36,432 [INFO] 
+============================================================
+2026-09-15 21:50:36,432 [INFO] Pipeline Summary
+2026-09-15 21:50:36,432 [INFO] ============================================================
+2026-09-15 21:50:36,432 [INFO]   Extract & Load: SUCCESS (5.7s)
+2026-09-15 21:50:36,432 [INFO]   CDC Diff: SUCCESS (0.0s)
+2026-09-15 21:50:36,432 [ERROR]   Transform: FAILED (0.0s) — permission denied for schema staging
+
+2026-09-15 21:50:36,432 [INFO] 
+Total time: 5.7s
+2026-09-15 21:50:36,432 [INFO] ============================================================
