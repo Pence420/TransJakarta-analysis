@@ -1,19 +1,25 @@
 import type { ReactNode } from 'react';
+import AnimatedSection from './AnimatedSection';
 
-interface ChartCardProps {
+interface Props {
   title: string;
   subtitle?: string;
   children: ReactNode;
+  delay?: number;
 }
 
-export default function ChartCard({ title, subtitle, children }: ChartCardProps) {
+export default function ChartCard({ title, subtitle, children, delay = 0 }: Props) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-[#E8EAED]">
-      <div className="mb-4">
-        <h3 className="text-base font-semibold text-[#1A1A2E]">{title}</h3>
-        {subtitle && <p className="text-xs text-[#6B7280] mt-0.5">{subtitle}</p>}
+    <AnimatedSection delay={delay}>
+      <div className="glass rounded-2xl p-6">
+        <div className="mb-4">
+          <h3 className="text-base font-semibold text-white">{title}</h3>
+          {subtitle && (
+            <p className="text-xs text-[#64748B] mt-1">{subtitle}</p>
+          )}
+        </div>
+        {children}
       </div>
-      {children}
-    </div>
+    </AnimatedSection>
   );
 }

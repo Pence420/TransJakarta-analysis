@@ -1,6 +1,10 @@
-from fastapi import APIRouter, HTTPException, Query
+import re
+from enum import Enum
+
+from fastapi import APIRouter, HTTPException, Query, Request
 
 from api.database import get_db
+from api.limiter import limiter
 from api.models import (
     CoverageResponse,
     FeedVersionResponse,
@@ -18,6 +22,20 @@ from api.models import (
 router = APIRouter()
 
 MAX_LIMIT = 1000
+
+_ID_PATTERN = re.compile(r"^[a-zA-Z0-9_-]+$")
+
+
+class ChangeType(str, Enum):
+    ADDED = "ADDED"
+    REMOVED = "REMOVED"
+    MODIFIED = "MODIFIED"
+
+
+def _validate_id(value: str, field_name: str) -> str:
+    if not _ID_PATTERN.match(value):
+        raise HTTPException(status_code=422, detail=f"Invalid {field_name} format")
+    return value
 
 
 def paginate(query: str, params: list, limit: int, offset: int, conn) -> dict:
@@ -40,7 +58,9 @@ def paginate(query: str, params: list, limit: int, offset: int, conn) -> dict:
 # ============================================================
 
 @router.get("/routes", response_model=PaginatedResponse)
+@limiter.limit("30/minute")
 def list_routes(
+    request: Request,
     limit: int = Query(default=50, le=MAX_LIMIT),
     offset: int = Query(default=0, ge=0),
 ):
@@ -52,7 +72,9 @@ def list_routes(
 
 
 @router.get("/routes/{route_id}", response_model=RouteResponse)
-def get_route(route_id: str):
+@limiter.limit("30/minute")
+def get_route(request: Request, route_id: str):
+    _validate_id(route_id, "route_id")
     with get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM marts.dim_route WHERE route_id = %s", (route_id,))
@@ -64,7 +86,9 @@ def get_route(route_id: str):
 
 
 @router.get("/routes/{route_id}/shape", response_model=RouteShapeResponse)
-def get_route_shape(route_id: str):
+@limiter.limit("30/minute")
+def get_route_shape(request: Request, route_id: str):
+    _validate_id(route_id, "route_id")
     with get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -97,7 +121,9 @@ def get_route_shape(route_id: str):
 # ============================================================
 
 @router.get("/stops", response_model=PaginatedResponse)
+@limiter.limit("30/minute")
 def list_stops(
+    request: Request,
     limit: int = Query(default=100, le=MAX_LIMIT),
     offset: int = Query(default=0, ge=0),
     zone_id: str | None = Query(default=None),
@@ -113,7 +139,9 @@ def list_stops(
 
 
 @router.get("/stops/{stop_id}", response_model=StopResponse)
-def get_stop(stop_id: str):
+@limiter.limit("30/minute")
+def get_stop(request: Request, stop_id: str):
+    _validate_id(stop_id, "stop_id")
     with get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM marts.dim_stop WHERE stop_id = %s", (stop_id,))
@@ -132,7 +160,8 @@ def get_stop(stop_id: str):
 # ============================================================
 
 @router.get("/coverage", response_model=list[CoverageResponse])
-def get_coverage():
+@limiter.limit("30/minute")
+def get_coverage(request: Request):
     with get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -145,7 +174,9 @@ def get_coverage():
 
 
 @router.get("/headway", response_model=list[HeadwayResponse])
+@limiter.limit("30/minute")
 def get_headway(
+    request: Request,
     route_id: str | None = Query(default=None),
 ):
     with get_db() as conn:
@@ -169,7 +200,8 @@ def get_headway(
 
 
 @router.get("/service-span", response_model=list[ServiceSpanResponse])
-def get_service_span():
+@limiter.limit("30/minute")
+def get_service_span(request: Request):
     with get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -188,7 +220,8 @@ def get_service_span():
 # ============================================================
 
 @router.get("/feed-versions", response_model=list[FeedVersionResponse])
-def list_feed_versions():
+@limiter.limit("30/minute")
+def list_feed_versions(request: Request):
     with get_db() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -201,9 +234,11 @@ def list_feed_versions():
 
 
 @router.get("/feed-versions/{version_id}/changes")
+@limiter.limit("30/minute")
 def get_feed_version_changes(
+    request: Request,
     version_id: int,
-    change_type: str | None = Query(default=None, description="Filter: ADDED, REMOVED, MODIFIED"),
+    change_type: ChangeType | None = Query(default=None, description="Filter: ADDED, REMOVED, MODIFIED"),
 ):
     with get_db() as conn:
         result = {"route_changes": [], "stop_changes": [], "schedule_changes": []}

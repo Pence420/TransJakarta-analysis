@@ -1,50 +1,69 @@
-import type { ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
-interface DataTableProps {
-  columns: { key: string; label: string; render?: (row: Record<string, unknown>) => ReactNode }[];
-  data: Record<string, unknown>[];
-  onRowClick?: (row: Record<string, unknown>) => void;
+interface Column<T> {
+  key: string;
+  label: string;
+  render?: (value: unknown, row: T) => React.ReactNode;
 }
 
-export default function DataTable({ columns, data, onRowClick }: DataTableProps) {
+interface Props<T> {
+  columns: Column<T>[];
+  data: T[];
+  onRowClick?: (row: T) => void;
+  emptyMessage?: string;
+}
+
+export default function DataTable<T extends Record<string, unknown>>({
+  columns,
+  data,
+  onRowClick,
+  emptyMessage = 'No data available',
+}: Props<T>) {
+  if (data.length === 0) {
+    return (
+      <div className="text-center py-12 text-[#64748B]">{emptyMessage}</div>
+    );
+  }
+
   return (
-    <div className="bg-white rounded-2xl border border-[#E8EAED] overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-[#E8EAED] bg-[#F8F9FA]">
-              {columns.map((col) => (
-                <th
-                  key={col.key}
-                  className="text-left px-4 py-3 text-xs font-semibold text-[#6B7280] uppercase tracking-wider"
-                >
-                  {col.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, i) => (
-              <tr
-                key={i}
-                className={`border-b border-[#E8EAED] last:border-0 ${
-                  onRowClick ? 'cursor-pointer hover:bg-[#F8F9FA] transition-colors' : ''
-                }`}
-                onClick={() => onRowClick?.(row)}
+    <div className="overflow-x-auto rounded-xl">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-[rgba(255,255,255,0.06)]">
+            {columns.map((col) => (
+              <th
+                key={col.key}
+                className="text-left px-4 py-3 text-xs font-medium uppercase tracking-wider
+                  text-[#64748B] bg-[rgba(255,255,255,0.02)]"
               >
-                {columns.map((col) => (
-                  <td key={col.key} className="px-4 py-3">
-                    {col.render ? col.render(row) : String(row[col.key] ?? '-')}
-                  </td>
-                ))}
-              </tr>
+                {col.label}
+              </th>
             ))}
-          </tbody>
-        </table>
-      </div>
-      {data.length === 0 && (
-        <div className="text-center py-8 text-sm text-[#6B7280]">No data available</div>
-      )}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, i) => (
+            <motion.tr
+              key={i}
+              className={`border-b border-[rgba(255,255,255,0.04)]
+                ${onRowClick ? 'cursor-pointer hover:bg-[rgba(255,255,255,0.03)]' : ''}
+                transition-colors duration-150`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: i * 0.02 }}
+              onClick={() => onRowClick?.(row)}
+            >
+              {columns.map((col) => (
+                <td key={col.key} className="px-4 py-3 text-[#CBD5E1]">
+                  {col.render
+                    ? col.render(row[col.key], row)
+                    : String(row[col.key] ?? '-')}
+                </td>
+              ))}
+            </motion.tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

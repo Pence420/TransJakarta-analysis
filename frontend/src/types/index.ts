@@ -8,6 +8,8 @@ export interface Route {
   route_url: string | null;
   route_color: string | null;
   route_text_color: string | null;
+  feed_version_id: number;
+  loaded_at: string;
 }
 
 export interface Stop {
@@ -18,14 +20,17 @@ export interface Stop {
   stop_lat: number | null;
   stop_lon: number | null;
   zone_id: string | null;
+  stop_url: string | null;
   location_type: number | null;
   parent_station: string | null;
+  stop_timezone: string | null;
+  wheelchair_boarding: number | null;
 }
 
 export interface RouteShape {
   route_id: string;
   shape_id: string | null;
-  coordinates: number[][];
+  coordinates: [number, number][];
 }
 
 export interface Coverage {

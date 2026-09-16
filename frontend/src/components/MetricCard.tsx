@@ -1,28 +1,50 @@
-import type { ReactNode } from 'react';
+import { motion } from 'framer-motion';
+import type { LucideIcon } from 'lucide-react';
 
-interface MetricCardProps {
+interface Props {
   label: string;
   value: string | number;
   subtext?: string;
+  icon?: LucideIcon;
   color?: string;
-  icon?: ReactNode;
+  index?: number;
 }
 
-export default function MetricCard({ label, value, subtext, color, icon }: MetricCardProps) {
+export default function MetricCard({
+  label,
+  value,
+  subtext,
+  icon: Icon,
+  color = '#003478',
+  index = 0,
+}: Props) {
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-[#E8EAED] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-300">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-xs font-medium text-[#6B7280] uppercase tracking-wider mb-1">{label}</p>
-          <p className="text-2xl font-bold" style={{ color: color || '#1A1A2E' }}>{value}</p>
-          {subtext && <p className="text-xs text-[#6B7280] mt-1">{subtext}</p>}
-        </div>
-        {icon && (
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color || '#003478'}15` }}>
-            {icon}
+    <motion.div
+      className="glass rounded-2xl p-5 hover:bg-[rgba(30,41,59,0.6)] transition-all duration-300
+        hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] group"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -2 }}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <span className="text-xs font-medium uppercase tracking-wider text-[#64748B]">
+          {label}
+        </span>
+        {Icon && (
+          <div
+            className="flex items-center justify-center w-8 h-8 rounded-lg
+              transition-transform duration-200 group-hover:scale-110"
+            style={{ backgroundColor: `${color}20` }}
+          >
+            <Icon size={16} style={{ color }} />
           </div>
         )}
       </div>
-    </div>
+      <div className="text-2xl font-bold text-white mb-1">{value}</div>
+      {subtext && (
+        <div className="text-xs text-[#64748B]">{subtext}</div>
+      )}
+    </motion.div>
   );
 }

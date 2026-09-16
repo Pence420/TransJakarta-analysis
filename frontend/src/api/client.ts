@@ -1,35 +1,61 @@
+import type {
+  Route,
+  RouteShape,
+  Stop,
+  Coverage,
+  Headway,
+  ServiceSpan,
+  FeedVersion,
+  PaginatedResponse,
+  VersionChanges,
+} from '../types';
+
+const BASE = '/api';
+
 async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  const res = await fetch(`${BASE}${url}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || `HTTP ${res.status}`);
+  }
   return res.json();
 }
 
 export const api = {
   getRoutes: (limit = 50, offset = 0) =>
-    fetchJson(`/api/routes?limit=${limit}&offset=${offset}`),
+    fetchJson<PaginatedResponse<Route>>(`/routes?limit=${limit}&offset=${offset}`),
+
   getRoute: (id: string) =>
-    fetchJson(`/api/routes/${id}`),
+    fetchJson<Route>(`/routes/${encodeURIComponent(id)}`),
+
   getRouteShape: (id: string) =>
-    fetchJson(`/api/routes/${id}/shape`),
-  getStops: (limit = 100, offset = 0, zoneId?: string) => {
-    const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
-    if (zoneId) params.set('zone_id', zoneId);
-    return fetchJson(`/api/stops?${params}`);
-  },
+    fetchJson<RouteShape>(`/routes/${encodeURIComponent(id)}/shape`),
+
+  getStops: (limit = 100, offset = 0, zoneId?: string) =>
+    fetchJson<PaginatedResponse<Stop>>(
+      `/stops?limit=${limit}&offset=${offset}${zoneId ? `&zone_id=${encodeURIComponent(zoneId)}` : ''}`
+    ),
+
+  getAllStops: () =>
+    fetchJson<PaginatedResponse<Stop>>('/stops?limit=10000&offset=0'),
+
   getStop: (id: string) =>
-    fetchJson(`/api/stops/${id}`),
+    fetchJson<Stop>(`/stops/${encodeURIComponent(id)}`),
+
   getCoverage: () =>
-    fetchJson('/api/coverage'),
-  getHeadway: (routeId?: string) => {
-    const params = routeId ? `?route_id=${routeId}` : '';
-    return fetchJson(`/api/headway${params}`);
-  },
+    fetchJson<Coverage[]>('/coverage'),
+
+  getHeadway: (routeId?: string) =>
+    fetchJson<Headway[]>(`/headway${routeId ? `?route_id=${encodeURIComponent(routeId)}` : ''}`),
+
   getServiceSpan: () =>
-    fetchJson('/api/service-span'),
+    fetchJson<ServiceSpan[]>('/service-span'),
+
   getFeedVersions: () =>
-    fetchJson('/api/feed-versions'),
-  getFeedVersionChanges: (id: number, changeType?: string) => {
-    const params = changeType ? `?change_type=${changeType}` : '';
-    return fetchJson(`/api/feed-versions/${id}/changes${params}`);
-  },
+    fetchJson<FeedVersion[]>('/feed-versions'),
+
+  getFeedVersionChanges: (id: number, changeType?: string) =>
+    fetchJson<VersionChanges>(
+      `/feed-versions/${id}/changes${changeType ? `?change_type=${changeType}` : ''}`
+    ),
 };

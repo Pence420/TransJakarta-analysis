@@ -1,111 +1,179 @@
 import { useQuery } from '@tanstack/react-query';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { api } from '../api/client';
-import MetricCard from '../components/MetricCard';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { MapPin, Globe, Clock } from 'lucide-react';
+import AnimatedSection from '../components/AnimatedSection';
 import ChartCard from '../components/ChartCard';
+import MetricCard from '../components/MetricCard';
 import LoadingState from '../components/LoadingState';
-import { MapPin, Clock } from 'lucide-react';
+import ErrorState from '../components/ErrorState';
+import { api } from '../api/client';
+
+const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) => {
+  if (active && payload?.length) {
+    return (
+      <div className="glass-strong rounded-lg px-3 py-2 text-sm">
+        <p className="text-white font-medium">{label}</p>
+        <p className="text-[#94A3B8]">{payload[0].value} stops</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function CoveragePage() {
-  const { data: coverageData, isLoading: coverageLoading } = useQuery({
+  const { data: coverage, isLoading, error, refetch } = useQuery({
     queryKey: ['coverage'],
     queryFn: () => api.getCoverage(),
   });
 
-  const { data: serviceData, isLoading: serviceLoading } = useQuery({
+  const { data: serviceSpan } = useQuery({
     queryKey: ['service-span'],
     queryFn: () => api.getServiceSpan(),
   });
 
-  const coverage = Array.isArray(coverageData) ? coverageData : [];
-  const serviceSpan = Array.isArray(serviceData) ? serviceData : [];
+  const zones = coverage ?? [];
+  const spans = serviceSpan ?? [];
 
-  const totalStops = coverage.reduce((sum: number, c: Record<string, unknown>) => sum + (c.total_stops as number), 0);
-  const totalZones = coverage.length;
-  const avgServiceHours = serviceSpan.length > 0
-    ? (serviceSpan.reduce((sum: number, s: Record<string, unknown>) => sum + (s.service_hours as number || 0), 0) / serviceSpan.length).toFixed(1)
+  const totalStops = zones.reduce((s, z) => s + z.total_stops, 0);
+  const avgServiceHours = spans.length > 0
+    ? (spans.reduce((s, sp) => s + (sp.service_hours ?? 0), 0) / spans.length).toFixed(1)
     : '0';
 
+  const zoneChartData = zones.map((z) => ({
+    name: z.zone_id || 'Unknown',
+    stops: z.total_stops,
+    stations: z.unique_stations,
+  }));
+
+  const serviceChartData = spans
+    .sort((a, b) => (b.service_hours ?? 0) - (a.service_hours ?? 0))
+    .slice(0, 20)
+    .map((s) => ({
+      name: s.route_short_name || s.route_id,
+      hours: s.service_hours ?? 0,
+    }));
+
   return (
-    <div className="space-y-6 max-w-6xl">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">Coverage & Service</h1>
-        <p className="text-sm text-[#6B7280] mt-1">Stop distribution by zone and service span per route</p>
+    <div className="max-w-6xl mx-auto space-y-6">
+      <AnimatedSection>
+        <div>
+          <h1 className="text-2xl font-bold gradient-text mb-1">Network Coverage</h1>
+          <p className="text-sm text-[#64748B]">Stop distribution and service hours across zones</p>
+        </div>
+      </AnimatedSection>
+
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        <MetricCard
+          label="Total Stops"
+          value={totalStops.toLocaleString()}
+          icon={MapPin}
+          color="#003478"
+          index={0}
+        />
+        <MetricCard
+          label="Zones Covered"
+          value={zones.length}
+          icon={Globe}
+          color="#1A73E8"
+          index={1}
+        />
+        <MetricCard
+          label="Avg Service Hours"
+          value={`${avgServiceHours}h`}
+          subtext="per route"
+          icon={Clock}
+          color="#10B981"
+          index={2}
+        />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <MetricCard label="Total Stops" value={totalStops} icon={<MapPin size={18} className="text-[#003478]" />} />
-        <MetricCard label="Zones Covered" value={totalZones} icon={<MapPin size={18} className="text-[#2E7D32]" />} />
-        <MetricCard label="Avg Service Hours" value={`${avgServiceHours}h`} icon={<Clock size={18} className="text-[#E65100]" />} />
-      </div>
-
-      {(coverageLoading || serviceLoading) ? (
+      {isLoading ? (
         <LoadingState message="Loading coverage data..." />
+      ) : error ? (
+        <ErrorState message="Failed to load coverage data" onRetry={() => refetch()} />
       ) : (
         <>
-          {/* Coverage Chart */}
-          <ChartCard title="Stops by Zone" subtitle="Distribution of stops across zones">
-            <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={coverage} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="coverageGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#003478" stopOpacity={0.9} />
-                      <stop offset="100%" stopColor="#1A73E8" stopOpacity={0.6} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E8EAED" />
-                  <XAxis dataKey="zone_id" tick={{ fontSize: 11, fill: '#6B7280' }} />
-                  <YAxis tick={{ fontSize: 12, fill: '#6B7280' }} />
-                  <Tooltip
-                    contentStyle={{ borderRadius: '12px', border: '1px solid #E8EAED', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                    formatter={(value) => [`${value} stops`, 'Total']}
-                  />
-                  <Bar dataKey="total_stops" fill="url(#coverageGradient)" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </ChartCard>
-
-          {/* Service Span Chart */}
-          {serviceSpan.length > 0 && (
-            <ChartCard title="Service Hours by Route" subtitle="Operating hours per route (first to last departure)">
-              <div className="h-80">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ChartCard title="Stops by Zone" subtitle="Distribution across zones">
+              <div className="h-[280px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={serviceSpan.slice(0, 15)} layout="vertical" margin={{ top: 10, right: 20, left: 80, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="serviceGradient" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#E65100" stopOpacity={0.8} />
-                        <stop offset="100%" stopColor="#FF6D00" stopOpacity={0.6} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#E8EAED" horizontal={false} />
-                    <XAxis type="number" tick={{ fontSize: 12, fill: '#6B7280' }} />
-                    <YAxis type="category" dataKey="route_short_name" tick={{ fontSize: 11, fill: '#6B7280' }} width={70} />
-                    <Tooltip
-                      contentStyle={{ borderRadius: '12px', border: '1px solid #E8EAED' }}
-                      formatter={(value) => [`${value} hours`, 'Service Span']}
+                  <BarChart data={zoneChartData} barSize={32}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fill: '#64748B', fontSize: 11 }}
+                      axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+                      tickLine={false}
                     />
-                    <Bar dataKey="service_hours" fill="url(#serviceGradient)" radius={[0, 6, 6, 0]} />
+                    <YAxis
+                      tick={{ fill: '#64748B', fontSize: 11 }}
+                      axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+                      tickLine={false}
+                    />
+                    <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                    <Bar dataKey="stops" fill="#003478" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </ChartCard>
-          )}
 
-          {/* Zone Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {coverage.map((zone: Record<string, unknown>) => (
-              <div
-                key={zone.zone_id as string}
-                className="bg-white rounded-xl p-4 border border-[#E8EAED] hover:shadow-md transition-all duration-200"
-              >
-                <p className="text-xs font-medium text-[#6B7280] uppercase tracking-wider mb-1">Zone {zone.zone_id as string}</p>
-                <p className="text-xl font-bold text-[#1A1A2E]">{zone.total_stops as number}</p>
-                <p className="text-xs text-[#6B7280]">stops · {zone.unique_stations as number} stations</p>
+            <ChartCard title="Service Hours by Route" subtitle="Top 20 longest service windows">
+              <div className="h-[280px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={serviceChartData} layout="vertical" barSize={16}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                    <XAxis
+                      type="number"
+                      tick={{ fill: '#64748B', fontSize: 11 }}
+                      axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      type="category"
+                      dataKey="name"
+                      tick={{ fill: '#64748B', fontSize: 11 }}
+                      axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+                      tickLine={false}
+                      width={50}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: 'rgba(17,24,39,0.95)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: 8,
+                        color: '#F1F5F9',
+                      }}
+                      cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                    />
+                    <Bar dataKey="hours" fill="#F59E0B" radius={[0, 6, 6, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
-            ))}
+            </ChartCard>
           </div>
+
+          <AnimatedSection delay={0.2}>
+            <ChartCard title="Zone Details">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {zones.map((zone, i) => (
+                  <AnimatedSection key={zone.zone_id} delay={i * 0.05}>
+                    <div className="glass rounded-xl p-4 hover:bg-[rgba(30,41,59,0.6)] transition-all duration-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <MapPin size={14} className="text-[#003478]" />
+                        <span className="font-medium text-white text-sm">
+                          {zone.zone_id || 'Unknown'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-xs text-[#64748B]">
+                        <span>{zone.total_stops} stops</span>
+                        <span>{zone.unique_stations} stations</span>
+                      </div>
+                    </div>
+                  </AnimatedSection>
+                ))}
+              </div>
+            </ChartCard>
+          </AnimatedSection>
         </>
       )}
     </div>
