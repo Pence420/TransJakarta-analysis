@@ -8,8 +8,7 @@ export interface Route {
   route_url: string | null;
   route_color: string | null;
   route_text_color: string | null;
-  feed_version_id: number;
-  loaded_at: string;
+  feed_version_id?: number;
 }
 
 export interface Stop {
@@ -20,11 +19,8 @@ export interface Stop {
   stop_lat: number | null;
   stop_lon: number | null;
   zone_id: string | null;
-  stop_url: string | null;
   location_type: number | null;
   parent_station: string | null;
-  stop_timezone: string | null;
-  wheelchair_boarding: number | null;
 }
 
 export interface RouteShape {
@@ -79,6 +75,7 @@ export interface Change {
   old_value: string | null;
   new_value: string | null;
   detected_at: string;
+  entity_type?: 'route' | 'stop' | 'schedule';
 }
 
 export interface PaginatedResponse<T> {
@@ -88,7 +85,7 @@ export interface PaginatedResponse<T> {
   offset: number;
 }
 
-export interface VersionChanges {
+export interface ChangesResponse {
   route_changes: Change[];
   stop_changes: Change[];
   schedule_changes: Change[];
