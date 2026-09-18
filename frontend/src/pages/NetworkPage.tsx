@@ -3,7 +3,7 @@ import MapView from '../components/MapView';
 
 export default function NetworkPage() {
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageTitle
         title="Network Map"
         subtitle="Explore corridors across Jakarta — select a route to trace its shape on the live map."

@@ -44,7 +44,7 @@ export default function CoveragePage() {
     .map((s) => ({ name: s.route_short_name ?? s.route_id, hours: s.service_hours ?? 0 }));
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageTitle
         title="Network Coverage"
         subtitle="Stop distribution, station density, and daily service windows."
@@ -57,9 +57,9 @@ export default function CoveragePage() {
         <KpiCard item={{ label: 'Avg Service Hours', value: `${avgHours} h`, sub: 'per corridor', icon: 'clock' }} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ChartCard title="Stops by Zone" subtitle="Distribution across aggregated zones">
-          <div className="h-[280px] w-full">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5">
+        <ChartCard className="xl:col-span-7" title="Stops by zone" subtitle="Distribution across aggregated zones">
+          <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={zoneChart} barSize={44}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -72,8 +72,8 @@ export default function CoveragePage() {
           </div>
         </ChartCard>
 
-        <ChartCard title="Service Hours by Route" subtitle="Top 20 corridors by daily service window (h)">
-          <div className="h-[280px] w-full">
+        <ChartCard className="xl:col-span-5" title="Service hours by route" subtitle="Top 20 corridors by daily service window (h)">
+          <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={serviceChart} layout="vertical" barSize={14}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
@@ -87,13 +87,13 @@ export default function CoveragePage() {
         </ChartCard>
       </div>
 
-      <ChartCard title="Zone Details" subtitle="Stops and station counts per coverage zone">
+      <ChartCard title="Zone directory" subtitle="Stops and station counts per coverage zone">
         {zones.length === 0 ? (
           <p className="text-sm text-ink-dim text-center py-8">No coverage zones available.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {zones.map((z) => (
-              <div key={z.zone_id} className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-4 hover:bg-white/[0.04] hover:border-beige/20 transition-colors">
+              <div key={z.zone_id} className="bg-black/10 border border-white/[0.06] rounded-xl p-4 hover:bg-beige/[0.04] hover:border-beige/20 hover:-translate-y-0.5 transition-all">
                 <div className="flex items-center gap-2 mb-2.5">
                   <MapPin size={13} className="text-beige" />
                   <span className="font-medium text-ink text-sm">{z.zone_id || 'All zones'}</span>

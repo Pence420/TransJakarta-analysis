@@ -49,9 +49,10 @@ export default function HeadwayPage() {
         cur.count += 1;
         buckets.set(h.service_hour, cur);
       });
-    return [...buckets.entries()]
-      .map(([hour, v]) => ({ hour, avg: Math.round((v.sum / v.count) * 10) / 10 }))
-      .sort((a, b) => a.hour - b.hour);
+return Array.from({ length: 21 }, (_, i) => i + 4).map((hour) => {
+  const v = buckets.get(hour);
+  return { hour, avg: v ? Math.round((v.sum / v.count) * 10) / 10 : 0 };
+});
   }, [headway.data]);
 
   const avgHeadway = data.length
@@ -63,19 +64,19 @@ export default function HeadwayPage() {
   if (headway.error || routesData.error) return <ErrorState message="Failed to load headway data" onRetry={() => { headway.refetch(); routesData.refetch(); }} />;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageTitle
         title="Headway Analysis"
         subtitle="Time gaps between consecutive departures across corridors — the heartbeat of the network."
         trailing={
-          <div className="glass rounded-xl px-3 py-2 min-w-[220px]">
-            <div className="flex items-center gap-2 text-[11px] text-ink-dim uppercase tracking-wider mb-1">
+          <div className="glass rounded-xl px-3.5 py-3 min-w-[230px]">
+            <div className="flex items-center gap-2 panel-label mb-1.5">
               <Filter size={12} /> Route
             </div>
             <select
               value={routeFilter}
               onChange={(e) => setRouteFilter(e.target.value)}
-              className="w-full bg-transparent text-sm text-ink focus:outline-none"
+              className="w-full bg-transparent text-sm font-medium text-ink focus:outline-none"
             >
               <option value="">All corridors</option>
               {routes.map((r) => (
@@ -102,7 +103,7 @@ export default function HeadwayPage() {
             : 'Network-wide average between 04:00 and midnight'
         }
       >
-        <div className="h-[300px] w-full">
+        <div className="h-[330px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} barSize={18}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />

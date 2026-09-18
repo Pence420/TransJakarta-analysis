@@ -13,14 +13,14 @@ const STATUS: Record<ChangeType, { color: string; bg: string; icon: typeof Plus;
   MODIFIED: { color: '#d9a24f', bg: 'rgba(217,162,79,0.12)',  icon: Edit3,  label: 'Modified' },
 };
 
-const BADGE = 'px-2 py-0.5 rounded text-[11px] font-medium';
+const BADGE = 'px-2 py-1 rounded-md font-mono text-[10px] font-medium uppercase tracking-[0.08em]';
 
 function ChangeCard({ change, type }: { change: Change; type: string }) {
   const s = STATUS[change.change_type];
   const Icon = s.icon;
   return (
-    <div className="glass rounded-xl p-4 hover:bg-white/[0.04] transition-colors flex gap-3 animate-fade-up">
-      <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ background: s.bg }}>
+    <article className="glass rounded-xl p-4 sm:p-5 hover:bg-card-hover hover:-translate-y-0.5 transition-all duration-300 flex gap-3.5 animate-fade-up">
+      <div className="w-9 h-9 rounded-lg ring-1 ring-white/[0.05] flex items-center justify-center shrink-0 mt-0.5" style={{ background: s.bg }}>
         <Icon size={15} style={{ color: s.color }} />
       </div>
       <div className="flex-1 min-w-0">
@@ -28,7 +28,7 @@ function ChangeCard({ change, type }: { change: Change; type: string }) {
           <span className={BADGE} style={{ background: s.bg, color: s.color }}>{s.label}</span>
           <span className={`${BADGE} bg-white/[0.05] text-ink-dim`}>{type}</span>
         </div>
-        <p className="text-sm text-ink font-medium">
+        <p className="font-display text-base text-ink font-semibold tracking-[-0.025em]">
           {change.route_id ?? change.stop_id ?? change.trip_id ?? '—'}
         </p>
         {change.field_changed && (
@@ -39,12 +39,12 @@ function ChangeCard({ change, type }: { change: Change; type: string }) {
             {change.new_value && <span className="text-sage">{change.new_value}</span>}
           </p>
         )}
-        <div className="flex items-center gap-1.5 text-[11px] text-ink-dim mt-2">
+        <div className="flex items-center gap-1.5 font-mono text-[10px] text-ink-dim mt-2.5">
           <Calendar size={11} />
           <span>{fmtDate(change.detected_at)}</span>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -85,28 +85,28 @@ export default function ChangesPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageTitle
         title="Feed Changes"
         subtitle="Track network deltas between GTFS feed versions — routes added, stops modified, schedules revised."
         trailing={
           <div className="flex items-center gap-3">
             {latestVersion && (
-              <span className="text-[11px] text-ink-dim uppercase tracking-wider">
-                Latest v{latestVersion.feed_version_id}
+              <span className="page-kicker whitespace-nowrap">
+                Latest / v{latestVersion.feed_version_id}
               </span>
             )}
           </div>
         }
       />
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="glass rounded-xl p-3 flex-1">
-          <div className="text-[11px] text-ink-dim uppercase tracking-wider mb-1">Feed version</div>
+      <section className="glass rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4" aria-label="Feed comparison controls">
+        <div className="flex-1">
+          <div className="panel-label mb-2">Choose feed version</div>
           <select
             value={version ?? ''}
             onChange={(e) => handleVersionChange(e.target.value)}
-            className="w-full bg-transparent text-sm text-ink focus:outline-none"
+            className="w-full rounded-xl bg-black/15 border border-white/[0.07] px-3 py-2.5 text-sm font-medium text-ink focus:outline-none"
           >
             <option value="">Select a version…</option>
             {versions.data?.map((v) => (
@@ -117,15 +117,16 @@ export default function ChangesPage() {
           </select>
         </div>
         {version && (
-          <div className="glass rounded-xl p-3 flex gap-2 items-start">
-            <span className="text-[11px] text-ink-dim uppercase tracking-wider mb-1 w-full sm:w-auto">Filter</span>
+          <div className="md:w-auto">
+            <span className="panel-label block mb-2">Change type</span>
+            <div className="flex gap-1.5">
             {(['', 'ADDED', 'REMOVED', 'MODIFIED'] as const).map((t) => {
               const s = t ? STATUS[t] : null;
               return (
                 <button
                   key={t}
                   onClick={() => setFilter(t)}
-                  className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors ${
+                  className={`px-3 py-2 rounded-lg text-[11px] font-semibold transition-all active:scale-[0.98] ${
                     filter === t
                       ? 'bg-beige/15 text-beige border border-beige/30'
                       : 'glass text-ink-dim hover:text-ink border border-transparent'
@@ -135,14 +136,18 @@ export default function ChangesPage() {
                 </button>
               );
             })}
+            </div>
           </div>
         )}
-      </div>
+      </section>
 
       {!version && (
-        <div className="text-center py-20">
-          <GitBranch size={44} className="mx-auto mb-4 text-ink-dim opacity-25" />
-          <p className="text-sm text-ink-muted">Select a feed version above to inspect changes.</p>
+        <div className="glass rounded-2xl text-center py-20 px-6">
+          <div className="w-14 h-14 rounded-2xl bg-beige/[0.07] ring-1 ring-beige/10 flex items-center justify-center mx-auto mb-5">
+            <GitBranch size={23} className="text-beige" />
+          </div>
+          <p className="font-display text-lg font-semibold text-ink">Compare a GTFS snapshot</p>
+          <p className="text-sm text-ink-muted mt-2">Select a feed version above to inspect route, stop, and schedule changes.</p>
         </div>
       )}
 
@@ -161,12 +166,12 @@ export default function ChangesPage() {
               const Icon = s.icon;
               return (
                 <div key={type} className="glass rounded-2xl p-4 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: s.bg }}>
+                  <div className="w-9 h-9 rounded-lg ring-1 ring-white/[0.05] flex items-center justify-center" style={{ background: s.bg }}>
                     <Icon size={15} style={{ color: s.color }} />
                   </div>
                   <div>
-                    <p className="text-[11px] text-ink-dim uppercase tracking-wider">{s.label}</p>
-                    <p className="text-xl font-semibold font-display text-ink">{count}</p>
+                    <p className="panel-label">{s.label}</p>
+                    <p className="metric-value text-2xl font-semibold text-ink mt-0.5">{count}</p>
                   </div>
                 </div>
               );

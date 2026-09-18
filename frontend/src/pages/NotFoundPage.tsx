@@ -4,10 +4,12 @@ import { Compass } from 'lucide-react';
 export default function NotFoundPage() {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-center">
-        <Compass size={44} className="mx-auto mb-5 text-ink-dim opacity-40" />
-        <p className="font-display text-6xl font-bold text-ink mb-3">404</p>
+    <div className="glass rounded-[1.5rem] flex items-center justify-center min-h-[60vh]">
+      <div className="text-center px-6">
+        <div className="w-14 h-14 rounded-2xl bg-beige/[0.08] ring-1 ring-beige/10 flex items-center justify-center mx-auto mb-5">
+          <Compass size={24} className="text-beige" />
+        </div>
+        <p className="font-display text-7xl font-semibold tracking-[-0.08em] text-ink mb-3">404</p>
         <p className="text-sm text-ink-muted mb-8">That stop isn’t on this route.</p>
         <button
           onClick={() => navigate('/')}

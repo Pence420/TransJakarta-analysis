@@ -15,14 +15,14 @@ interface Props<T> {
 
 export default function DataTable<T>({ columns, rows, empty = 'No data' }: Props<T>) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto -mx-1 px-1">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/[0.06]">
             {columns.map((col) => (
               <th
                 key={col.key}
-                className={`text-left text-[11px] font-medium uppercase tracking-[0.12em] text-ink-dim px-3 py-2.5 ${
+                className={`text-left font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-ink-dim px-3 py-3 ${
                   col.align === 'right' ? 'text-right' : ''
                 }`}
               >
@@ -40,11 +40,11 @@ export default function DataTable<T>({ columns, rows, empty = 'No data' }: Props
             </tr>
           ) : (
             rows.map((row, i) => (
-              <tr key={i} className="border-b border-white/[0.03] last:border-0 hover:bg-white/[0.02] transition-colors">
+              <tr key={i} className="border-b border-white/[0.045] last:border-0 hover:bg-beige/[0.035] transition-colors">
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={`px-3 py-2.5 align-middle text-ink-muted ${col.align === 'right' ? 'text-right' : ''}`}
+                    className={`px-3 py-3 align-middle text-ink-muted ${col.align === 'right' ? 'text-right' : ''}`}
                   >
                     {col.render(row)}
                   </td>

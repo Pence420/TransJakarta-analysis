@@ -140,17 +140,20 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
   return (
     <div className={`flex flex-col lg:flex-row gap-4 ${heightClass} min-h-[420px]`}>
       {/* Map */}
-      <div className="flex-1 rounded-2xl overflow-hidden glass relative">
-        <div ref={containerRef} style={{ position: 'absolute', inset: 0 }} />
+      <div className="flex-1 rounded-[1.35rem] overflow-hidden glass relative isolate">
+        <div ref={containerRef} className="absolute inset-0" />
+        <div className="map-atmosphere absolute inset-0 z-[1] pointer-events-none" aria-hidden="true" />
+
+        <div className="absolute top-0 left-[19%] right-0 h-px bg-gradient-to-r from-transparent via-beige/35 to-transparent z-[2] pointer-events-none" />
 
         {/* Network badge */}
-        <div className="absolute top-3 left-3 z-10 glass-strong rounded-xl px-3 py-2 pointer-events-none">
-          <p className="text-[11px] uppercase tracking-[0.14em] text-ink-dim">Network</p>
-          <p className="text-sm font-medium text-ink">{routes.length} routes across Jakarta</p>
+        <div className="hidden sm:block absolute top-3 left-3 z-10 glass-strong rounded-xl px-3 py-2.5 pointer-events-none">
+          <p className="panel-label">Network status</p>
+          <p className="text-sm font-semibold text-ink mt-0.5">{routes.length} corridors online</p>
         </div>
 
         {sidebar === false && (
-          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 glass-strong rounded-xl px-3 py-2 flex items-center gap-2 w-[min(300px,70%)]">
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 glass-strong rounded-xl px-3 py-2 flex items-center gap-2 w-[min(320px,70%)]">
             <RouteIcon size={14} className="text-beige shrink-0" />
             <select
               value={selected ?? ''}
@@ -158,7 +161,7 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
                 const r = routes.find((x) => x.route_id === e.target.value);
                 if (r) handleSelect(r);
               }}
-              className="w-full bg-transparent text-sm text-ink focus:outline-none truncate"
+              className="w-full bg-transparent text-sm font-medium text-ink focus:outline-none truncate"
               title="Select a corridor"
             >
               <option value="">Select a corridor…</option>
@@ -177,10 +180,17 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
               className="w-2.5 h-2.5 rounded-full"
               style={{ backgroundColor: selectedRoute.route_color ? `#${selectedRoute.route_color}` : DEFAULT_COLOR }}
             />
-            <span className="text-xs text-ink">
+            <span className="text-xs font-medium text-ink">
               {selectedRoute.route_short_name ?? selectedRoute.route_id} —{' '}
               {selectedRoute.route_long_name ?? selectedRoute.route_id}
             </span>
+          </div>
+        )}
+
+        {sidebar === false && !selectedRoute && (
+          <div className="absolute bottom-3 left-3 z-10 pointer-events-none">
+            <p className="panel-label text-beige/75">Live corridor canvas</p>
+            <p className="text-xs text-ink-muted mt-1">Pick a route to trace its service path.</p>
           </div>
         )}
 
@@ -194,10 +204,11 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
 
       {/* Sidebar route list */}
       {sidebar && (
-        <div className="w-full lg:w-[320px] glass rounded-2xl flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-white/[0.06]">
-            <h1 className="text-lg font-semibold text-ink font-display">Routes</h1>
-            <p className="text-xs text-ink-muted mt-0.5 mb-3">Select a route to trace its corridor</p>
+        <div className="w-full lg:w-[340px] glass rounded-[1.35rem] flex flex-col overflow-hidden">
+          <div className="p-5 border-b border-white/[0.06]">
+            <p className="page-kicker mb-2">Route directory</p>
+            <h1 className="text-xl font-semibold text-ink font-display tracking-[-0.035em]">Trace a corridor</h1>
+            <p className="text-xs text-ink-muted mt-1 mb-4">Select a route to inspect its service shape.</p>
             <div className="relative">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-dim pointer-events-none" />
               <input
@@ -205,12 +216,12 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
                 placeholder="Search routes…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.07] rounded-lg pl-9 pr-3 py-2 text-sm text-ink placeholder-ink-dim focus:outline-none focus:border-beige/40 transition-colors"
+                className="w-full bg-black/15 border border-white/[0.08] rounded-xl pl-9 pr-3 py-2.5 text-sm text-ink placeholder-ink-dim focus:outline-none focus:border-beige/40 transition-colors"
               />
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-1">
+          <div className="flex-1 overflow-y-auto p-2.5 space-y-1">
             {isLoading && (
               <p className="text-sm text-ink-dim text-center py-10">Loading routes…</p>
             )}
@@ -232,7 +243,7 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
                 <button
                   key={route.route_id}
                   onClick={() => handleSelect(route)}
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all duration-200 ${
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all duration-200 hover:translate-x-0.5 ${
                     active
                       ? 'bg-beige/[0.08] border border-beige/25'
                       : 'hover:bg-white/[0.04] border border-transparent'
@@ -256,7 +267,7 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
             })}
           </div>
 
-          <div className="p-3 border-t border-white/[0.06] flex items-center gap-4 text-[11px] text-ink-dim">
+          <div className="p-4 border-t border-white/[0.06] flex items-center gap-4 text-[11px] text-ink-dim">
             <span className="flex items-center gap-1.5">
               <RouteIcon size={12} className="text-beige" /> {routes.length} routes
             </span>
