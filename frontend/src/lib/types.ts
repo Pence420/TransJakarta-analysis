@@ -8,7 +8,6 @@ export interface Route {
   route_url: string | null;
   route_color: string | null;
   route_text_color: string | null;
-  feed_version_id?: number;
 }
 
 export interface Stop {
@@ -63,6 +62,9 @@ export interface FeedVersion {
   file_size_bytes: number | null;
 }
 
+export type EntityType = 'route' | 'stop' | 'schedule';
+export type ChangeType = 'ADDED' | 'REMOVED' | 'MODIFIED';
+
 export interface Change {
   change_id: number;
   feed_version_id: number;
@@ -70,12 +72,12 @@ export interface Change {
   route_id?: string;
   stop_id?: string;
   trip_id?: string;
-  change_type: 'ADDED' | 'REMOVED' | 'MODIFIED';
+  change_type: ChangeType;
   field_changed: string | null;
   old_value: string | null;
   new_value: string | null;
   detected_at: string;
-  entity_type?: 'route' | 'stop' | 'schedule';
+  entity_type?: EntityType;
 }
 
 export interface PaginatedResponse<T> {
@@ -89,4 +91,11 @@ export interface ChangesResponse {
   route_changes: Change[];
   stop_changes: Change[];
   schedule_changes: Change[];
+}
+
+export interface KpiItem {
+  label: string;
+  value: string;
+  sub?: string;
+  icon: 'route' | 'stop' | 'station' | 'zone' | 'clock' | 'calendar' | 'activity' | 'gauge';
 }

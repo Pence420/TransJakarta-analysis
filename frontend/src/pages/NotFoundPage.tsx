@@ -1,18 +1,19 @@
 import { useNavigate } from 'react-router-dom';
-import { Home } from 'lucide-react';
+import { Compass } from 'lucide-react';
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
       <div className="text-center">
-        <p className="text-8xl font-bold text-white mb-4">404</p>
-        <p className="text-lg text-slate-400 mb-8">Page not found</p>
+        <Compass size={44} className="mx-auto mb-5 text-ink-dim opacity-40" />
+        <p className="font-display text-6xl font-bold text-ink mb-3">404</p>
+        <p className="text-sm text-ink-muted mb-8">That stop isn’t on this route.</p>
         <button
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-500 text-white text-sm font-medium hover:bg-blue-400 transition-colors"
           onClick={() => navigate('/')}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-beige/15 text-beige text-sm font-medium border border-beige/25 hover:bg-beige/25 transition-colors"
         >
-          <Home size={16} /> Back to Routes
+          Back to Overview
         </button>
       </div>
     </div>

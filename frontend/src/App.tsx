@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
-import RoutesPage from './pages/RoutesPage';
+import OverviewPage from './pages/OverviewPage';
+import NetworkPage from './pages/NetworkPage';
 import HeadwayPage from './pages/HeadwayPage';
 import CoveragePage from './pages/CoveragePage';
 import ChangesPage from './pages/ChangesPage';
@@ -11,7 +12,8 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<RoutesPage />} />
+        <Route index element={<OverviewPage />} />
+        <Route path="map" element={<NetworkPage />} />
         <Route path="headway" element={<HeadwayPage />} />
         <Route path="coverage" element={<CoveragePage />} />
         <Route path="changes" element={<ChangesPage />} />

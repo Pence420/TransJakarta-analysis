@@ -1,15 +1,24 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { Clock, Filter } from 'lucide-react';
+import {
+  Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from 'recharts';
+import { Filter } from 'lucide-react';
 import { api } from '../lib/api';
+import { formatNumber } from '../lib/format';
+import PageTitle from '../components/PageTitle';
+import KpiCard from '../components/KpiCard';
+import ChartCard from '../components/ChartCard';
+import DataTable from '../components/DataTable';
+import { Spinner, ErrorState } from '../components/LoadingState';
+import type { Headway, Route } from '../lib/types';
 
-function Tip({ active, payload, label }: any) {
+function Tip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string | number }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="glass rounded-lg px-3 py-2 text-xs shadow-xl border border-white/[0.06]">
-      <p className="text-slate-400 mb-0.5">Hour {label}</p>
-      <p className="text-white font-medium">{payload[0].value} min</p>
+    <div className="glass-strong rounded-lg px-3 py-2 text-xs">
+      <p className="text-ink-dim mb-0.5">Hour {label}:00</p>
+      <p className="text-ink font-semibold">{payload[0].value} min</p>
     </div>
   );
 }
@@ -17,145 +26,117 @@ function Tip({ active, payload, label }: any) {
 export default function HeadwayPage() {
   const [routeFilter, setRouteFilter] = useState('');
 
-  const { data: headway, isLoading, error, refetch } = useQuery({
+  const headway = useQuery({
     queryKey: ['headway', routeFilter],
     queryFn: () => api.getHeadway(routeFilter || undefined),
   });
-
-  const { data: routesData } = useQuery({
+  const routesData = useQuery({
     queryKey: ['routes-list'],
     queryFn: () => api.getRoutes(500, 0),
   });
 
-  const data = headway ?? [];
-  const routes = routesData?.data ?? [];
+  const data = headway.data ?? [];
+  const routes: Route[] = routesData.data?.data ?? [];
+  const selectedRoute = routes.find((r) => r.route_id === routeFilter);
 
-  const chartData = data
-    .filter((h) => h.service_hour >= 5 && h.service_hour <= 23)
-    .reduce((acc, h) => {
-      const ex = acc.find((a) => a.hour === h.service_hour);
-      if (ex) {
-        ex.avg = Math.round(((ex.avg * ex.count + h.avg_headway_minutes) / (ex.count + 1)) * 10) / 10;
-        ex.count++;
-      } else {
-        acc.push({ hour: h.service_hour, avg: h.avg_headway_minutes, count: 1 });
-      }
-      return acc;
-    }, [] as Array<{ hour: number; avg: number; count: number }>)
-    .sort((a, b) => a.hour - b.hour);
+  const chartData = useMemo(() => {
+    const buckets = new Map<number, { sum: number; count: number }>();
+    (headway.data ?? [])
+      .filter((h) => h.service_hour >= 4 && h.service_hour <= 24)
+      .forEach((h) => {
+        const cur = buckets.get(h.service_hour) ?? { sum: 0, count: 0 };
+        cur.sum += h.avg_headway_minutes;
+        cur.count += 1;
+        buckets.set(h.service_hour, cur);
+      });
+    return [...buckets.entries()]
+      .map(([hour, v]) => ({ hour, avg: Math.round((v.sum / v.count) * 10) / 10 }))
+      .sort((a, b) => a.hour - b.hour);
+  }, [headway.data]);
 
-  const avgHeadway = data.length > 0
+  const avgHeadway = data.length
     ? (data.reduce((s, h) => s + h.avg_headway_minutes, 0) / data.length).toFixed(1)
     : '0';
+  const tracked = new Set(data.map((h) => h.route_id)).size;
+
+  if (headway.isLoading || routesData.isLoading) return <Spinner />;
+  if (headway.error || routesData.error) return <ErrorState message="Failed to load headway data" onRetry={() => { headway.refetch(); routesData.refetch(); }} />;
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-white">Headway Analysis</h1>
-        <p className="text-sm text-slate-400 mt-1">Time gaps between consecutive trips per route</p>
-      </div>
+    <div className="space-y-5">
+      <PageTitle
+        title="Headway Analysis"
+        subtitle="Time gaps between consecutive departures across corridors — the heartbeat of the network."
+        trailing={
+          <div className="glass rounded-xl px-3 py-2 min-w-[220px]">
+            <div className="flex items-center gap-2 text-[11px] text-ink-dim uppercase tracking-wider mb-1">
+              <Filter size={12} /> Route
+            </div>
+            <select
+              value={routeFilter}
+              onChange={(e) => setRouteFilter(e.target.value)}
+              className="w-full bg-transparent text-sm text-ink focus:outline-none"
+            >
+              <option value="">All corridors</option>
+              {routes.map((r) => (
+                <option key={r.route_id} value={r.route_id}>
+                  {r.route_short_name ?? r.route_id} — {r.route_long_name || r.route_id}
+                </option>
+              ))}
+            </select>
+          </div>
+        }
+      />
 
-      {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="glass rounded-2xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Clock size={14} className="text-blue-400" />
-            </div>
-            <span className="text-xs text-slate-400">Avg Headway</span>
-          </div>
-          <p className="text-2xl font-bold text-white">{avgHeadway}<span className="text-sm text-slate-500 ml-1">min</span></p>
-        </div>
-        <div className="glass rounded-2xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
-              <Filter size={14} className="text-violet-400" />
-            </div>
-            <span className="text-xs text-slate-400">Routes Tracked</span>
-          </div>
-          <p className="text-2xl font-bold text-white">{new Set(data.map((h) => h.route_id)).size}</p>
-        </div>
-        <div className="glass rounded-2xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-              <Clock size={14} className="text-emerald-400" />
-            </div>
-            <span className="text-xs text-slate-400">Data Points</span>
-          </div>
-          <p className="text-2xl font-bold text-white">{data.length}</p>
-        </div>
+        <KpiCard item={{ label: 'Avg Headway', value: `${avgHeadway} min`, sub: 'across loaded routes', icon: 'clock' }} />
+        <KpiCard item={{ label: 'Routes Tracked', value: String(tracked), sub: routeFilter ? 'corridor in sample' : 'corridors in sample', icon: 'route' }} />
+        <KpiCard item={{ label: 'Data Points', value: formatNumber(data.length), sub: 'route-hour pairs', icon: 'activity' }} />
       </div>
 
-      {/* Filter */}
-      <div className="glass rounded-xl p-3">
-        <select
-          className="w-full bg-white/[0.04] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors"
-          value={routeFilter}
-          onChange={(e) => setRouteFilter(e.target.value)}
-        >
-          <option value="">All Routes</option>
-          {routes.map((r) => (
-            <option key={r.route_id} value={r.route_id}>{r.route_short_name} — {r.route_long_name || r.route_id}</option>
-          ))}
-        </select>
-      </div>
-
-      {isLoading && <p className="text-sm text-slate-500 text-center py-12">Loading headway data...</p>}
-      {error && (
-        <div className="text-center py-12">
-          <p className="text-sm text-red-400 mb-2">Failed to load headway data</p>
-          <button className="text-xs text-blue-400 hover:text-blue-300" onClick={() => refetch()}>Retry</button>
+      <ChartCard
+        title="Average Headway by Hour"
+        subtitle={
+          selectedRoute
+            ? `${selectedRoute.route_short_name ?? selectedRoute.route_id} — ${selectedRoute.route_long_name ?? ''}`
+            : 'Network-wide average between 04:00 and midnight'
+        }
+      >
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} barSize={18}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+              <XAxis
+                dataKey="hour"
+                tick={{ fill: '#6f6a63', fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v: number) => `${v}:00`}
+                interval={1}
+              />
+              <YAxis tick={{ fill: '#6f6a63', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip content={<Tip />} cursor={{ fill: 'rgba(212,201,168,0.06)' }} />
+              <Bar dataKey="avg" fill="#d4c9a8" radius={[5, 5, 0, 0]} fillOpacity={0.85} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
-      )}
+      </ChartCard>
 
-      {!isLoading && !error && (
-        <>
-          {/* Chart */}
-          <div className="glass rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-white mb-1">Average Headway by Hour</h2>
-            <p className="text-xs text-slate-500 mb-4">Minutes between consecutive trips</p>
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} barSize={24}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                  <XAxis dataKey="hour" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <Tooltip content={<Tip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
-                  <Bar dataKey="avg" fill="#3B82F6" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Table */}
-          <div className="glass rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-white mb-4">Headway Details</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/[0.06]">
-                    {['Route', 'Name', 'Hour', 'Avg', 'Min', 'Max'].map((h) => (
-                      <th key={h} className="text-left text-xs font-medium text-slate-500 px-3 py-2 uppercase tracking-wider">{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.slice(0, 50).map((h, i) => (
-                    <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                      <td className="px-3 py-2 text-slate-300">{h.route_id}</td>
-                      <td className="px-3 py-2 text-white truncate max-w-[180px]">{h.route_long_name || '-'}</td>
-                      <td className="px-3 py-2 text-slate-300">{h.service_hour}:00</td>
-                      <td className="px-3 py-2 text-white font-medium">{h.avg_headway_minutes}</td>
-                      <td className="px-3 py-2 text-slate-300">{h.min_headway_minutes}</td>
-                      <td className="px-3 py-2 text-slate-300">{h.max_headway_minutes}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </>
-      )}
+      <ChartCard title="Headway Details" subtitle="Route-hour level breakdown (first 50)">
+        <DataTable<Headway>
+          columns={[
+            { key: 'route', header: 'Route', render: (h) => <span className="font-mono text-ink">{h.route_id}</span> },
+            { key: 'name', header: 'Name', render: (h) => <span className="text-ink truncate max-w-[200px] block">{h.route_long_name ?? '—'}</span> },
+            { key: 'hour', header: 'Hour', render: (h) => <span className="text-ink-muted">{h.service_hour}:00</span> },
+            { key: 'avg', header: 'Avg (min)', align: 'right', render: (h) => <span className="font-semibold text-ink">{h.avg_headway_minutes}</span> },
+            { key: 'min', header: 'Min', align: 'right', render: (h) => <span>{h.min_headway_minutes}</span> },
+            { key: 'max', header: 'Max', align: 'right', render: (h) => <span>{h.max_headway_minutes}</span> },
+            { key: 'trips', header: 'Trip Pairs', align: 'right', render: (h) => <span>{h.trip_pairs_count}</span> },
+          ]}
+          rows={data.slice(0, 50)}
+          empty={routeFilter ? 'No headway data for this corridor' : 'No headway data'}
+        />
+      </ChartCard>
     </div>
   );
 }
