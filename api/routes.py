@@ -24,7 +24,7 @@ router = APIRouter()
 
 MAX_LIMIT = 1000
 
-_ID_PATTERN = re.compile(r"^[a-zA-Z0-9_-]+$")
+_ID_PATTERN = re.compile(r"^[a-zA-Z0-9_.-]+$")
 
 
 class ChangeType(str, Enum):
@@ -62,7 +62,7 @@ def paginate(query: str, params: list, limit: int, offset: int, conn) -> dict:
 @limiter.limit("30/minute")
 def list_routes(
     request: Request,
-    limit: int = Query(default=50, le=MAX_LIMIT),
+    limit: int = Query(default=50, ge=1, le=MAX_LIMIT),
     offset: int = Query(default=0, ge=0),
 ):
     with get_db() as conn:
@@ -96,11 +96,13 @@ def get_route_map_data(request: Request, route_id: str):
             cur.execute("""
                 SELECT ft.shape_id, ft.direction_id, s.shape_pt_lon, s.shape_pt_lat
                 FROM (
-                    SELECT DISTINCT shape_id, direction_id
+                    SELECT DISTINCT shape_id, direction_id, feed_version_id
                     FROM marts.fact_trip
                     WHERE route_id = %s AND shape_id IS NOT NULL
                 ) ft
-                JOIN staging.shapes s ON s.shape_id = ft.shape_id
+                JOIN staging.shapes s
+                  ON s.shape_id = ft.shape_id
+                 AND s.feed_version_id = ft.feed_version_id
                 ORDER BY ft.direction_id NULLS LAST, ft.shape_id, s.shape_pt_sequence
             """, (route_id,))
             shapes: list[dict] = []
@@ -119,16 +121,20 @@ def get_route_map_data(request: Request, route_id: str):
                 raise HTTPException(status_code=404, detail="No shape found for this route")
 
             cur.execute("""
-                SELECT DISTINCT ON (ds.stop_id)
-                    ds.stop_id, ds.stop_code, ds.stop_name, ds.stop_lat, ds.stop_lon, ds.location_type
-                FROM marts.fact_trip ft
-                JOIN staging.stop_times st
-                  ON st.trip_id = ft.trip_id AND st.feed_version_id = ft.feed_version_id
-                JOIN marts.dim_stop ds ON ds.stop_id = st.stop_id
-                WHERE ft.route_id = %s
-                  AND ds.stop_lat IS NOT NULL
-                  AND ds.stop_lon IS NOT NULL
-                ORDER BY ds.stop_id, ds.stop_name NULLS LAST
+                SELECT stop_id, stop_code, stop_name, stop_lat, stop_lon, location_type
+                FROM (
+                    SELECT DISTINCT ON (ds.stop_id)
+                        ds.stop_id, ds.stop_code, ds.stop_name, ds.stop_lat, ds.stop_lon, ds.location_type
+                    FROM marts.fact_trip ft
+                    JOIN staging.stop_times st
+                      ON st.trip_id = ft.trip_id AND st.feed_version_id = ft.feed_version_id
+                    JOIN marts.dim_stop ds ON ds.stop_id = st.stop_id
+                    WHERE ft.route_id = %s
+                      AND ds.stop_lat IS NOT NULL
+                      AND ds.stop_lon IS NOT NULL
+                    ORDER BY ds.stop_id
+                ) unique_stops
+                ORDER BY stop_name NULLS LAST, stop_id
             """, (route_id,))
             stops = [
                 {
@@ -180,7 +186,7 @@ def get_route_shape(request: Request, route_id: str):
 @limiter.limit("30/minute")
 def list_stops(
     request: Request,
-    limit: int = Query(default=100, le=MAX_LIMIT),
+    limit: int = Query(default=100, ge=1, le=MAX_LIMIT),
     offset: int = Query(default=0, ge=0),
     zone_id: str | None = Query(default=None),
 ):

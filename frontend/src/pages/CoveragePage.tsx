@@ -93,7 +93,7 @@ export default function CoveragePage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {zones.map((z) => (
-              <div key={z.zone_id} className="bg-black/10 border border-white/[0.06] rounded-xl p-4 hover:bg-beige/[0.04] hover:border-beige/20 hover:-translate-y-0.5 transition-all">
+              <div key={z.zone_id} className="bg-black/10 border border-white/[0.06] rounded-xl p-4 hover:bg-beige/[0.04] hover:border-beige/20 hover:-translate-y-0.5 transition-[transform,background-color,border-color]">
                 <div className="flex items-center gap-2 mb-2.5">
                   <MapPin size={13} className="text-beige" />
                   <span className="font-medium text-ink text-sm">{z.zone_id || 'All zones'}</span>

@@ -30,6 +30,7 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
@@ -314,6 +315,7 @@ input:focus-visible {
 /* Leaflet map theming */
 .map-canvas { background: #e8e5dc; }
 .leaflet-container { font-family: var(--font-sans); }
+.leaflet-container { touch-action: manipulation; }
 .leaflet-control-zoom {
   margin-right: 0.75rem !important;
   margin-bottom: 0.75rem !important;
@@ -413,4 +415,14 @@ input:focus-visible {
 }
 .pulse-dot {
   animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

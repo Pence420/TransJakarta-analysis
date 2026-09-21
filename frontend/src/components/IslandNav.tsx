@@ -28,7 +28,7 @@ export default function IslandNav() {
             end={item.path === '/'}
             title={item.label}
             aria-label={item.label}
-            className="group relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-full transition-all duration-200 hover:-translate-y-px active:translate-y-0 active:scale-[0.96]"
+            className="group relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-full transition-transform duration-200 hover:-translate-y-px active:translate-y-0 active:scale-[0.96]"
           >
             {({ isActive }) => (
               <>

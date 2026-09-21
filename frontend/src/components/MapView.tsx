@@ -4,11 +4,13 @@ import { Search, ChevronRight, Loader2, Route as RouteIcon, Bus } from 'lucide-r
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { api } from '../lib/api';
-import type { Route } from '../lib/types';
+import type { Route, RouteMapStop } from '../lib/types';
 
 const DEFAULT_COLOR = '#d4c9a8';
 const DEFAULT_HEIGHT = 'h-[calc(100dvh-7.5rem)]';
 const JAKARTA_CENTER: L.LatLngExpression = [-6.2088, 106.8456];
+const MAP_TILE_URL = import.meta.env.VITE_MAP_TILE_URL ?? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const MAP_TILE_ATTRIBUTION = import.meta.env.VITE_MAP_TILE_ATTRIBUTION ?? '&copy; OpenStreetMap contributors';
 
 interface Props {
   heightClass?: string;
@@ -20,6 +22,10 @@ function safeRouteColor(route?: Route): string {
   return route?.route_color && /^[0-9a-f]{6}$/i.test(route.route_color)
     ? `#${route.route_color}`
     : DEFAULT_COLOR;
+}
+
+function isJakartaStop(stop: RouteMapStop): boolean {
+  return stop.stop_lon >= 106.3 && stop.stop_lon <= 107.2 && stop.stop_lat >= -6.65 && stop.stop_lat <= -5.9;
 }
 
 export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, initialRoute = null }: Props) {
@@ -45,6 +51,7 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
   });
 
   const selectedRoute = routes.find((route) => route.route_id === effectiveSelected);
+  const visibleStopCount = mapData.data?.stops.filter(isJakartaStop).length ?? 0;
   const filtered = useMemo(
     () => routes.filter((route) =>
       (route.route_long_name ?? route.route_short_name ?? route.route_id)
@@ -72,9 +79,9 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
       wheelPxPerZoomLevel: 80,
     });
 
-    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const tiles = L.tileLayer(MAP_TILE_URL, {
       maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors',
+      attribution: MAP_TILE_ATTRIBUTION,
       crossOrigin: true,
       keepBuffer: 5,
       updateWhenZooming: false,
@@ -130,7 +137,7 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
     });
 
     routeData.stops
-      .filter((stop) => stop.stop_lon >= 106.3 && stop.stop_lon <= 107.2 && stop.stop_lat >= -6.65 && stop.stop_lat <= -5.9)
+      .filter(isJakartaStop)
       .forEach((stop) => {
         const point = L.latLng(stop.stop_lat, stop.stop_lon);
         bounds.extend(point);
@@ -160,8 +167,8 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
   }, [mapData.isError]);
 
   return (
-    <div className={`flex flex-col lg:flex-row gap-4 ${heightClass} min-h-[420px]`}>
-      <div className="flex-1 rounded-[1.35rem] overflow-hidden glass relative isolate">
+    <div className={`flex flex-col lg:flex-row gap-4 ${sidebar ? 'h-auto min-h-0 lg:h-[calc(100dvh-7.5rem)] lg:min-h-[420px]' : `${heightClass} min-h-[420px]`}`}>
+      <div className={`flex-1 rounded-[1.35rem] overflow-hidden glass relative isolate ${sidebar ? 'h-[56dvh] min-h-[420px] lg:h-auto lg:min-h-0' : ''}`}>
         <div ref={containerRef} className="absolute inset-0 z-0 map-canvas" aria-label="Interactive map of Jakarta's Transjakarta network" />
         {!mapReady && (
           <div className="map-atmosphere absolute inset-0 z-[1] pointer-events-none flex items-center justify-center" aria-hidden="true">
@@ -169,10 +176,10 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
           </div>
         )}
 
-        <div className="hidden sm:block absolute top-3 left-3 z-[500] glass-strong rounded-xl px-3 py-2.5 pointer-events-none">
+        <div aria-live="polite" className="hidden sm:block absolute top-3 left-3 z-[500] glass-strong rounded-xl px-3 py-2.5 pointer-events-none">
           <p className="panel-label">Network status</p>
           <p className="text-sm font-semibold text-ink mt-0.5">
-            {selectedRoute ? `${selectedRoute.route_short_name ?? selectedRoute.route_id} · ${mapData.data?.stops.length ?? 0} stops` : `${routes.length} corridors`}
+            {selectedRoute && mapData.isSuccess ? `${selectedRoute.route_short_name ?? selectedRoute.route_id} · ${visibleStopCount} stops` : `${routes.length} corridors`}
           </p>
         </div>
 
@@ -181,6 +188,7 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
             <RouteIcon size={14} className="text-beige shrink-0" />
             <select
               value={effectiveSelected ?? ''}
+              aria-label="Select a Transjakarta corridor"
               onChange={(event) => {
                 const route = routes.find((item) => item.route_id === event.target.value);
                 if (route) handleSelect(route);
@@ -196,15 +204,15 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
           </div>
         )}
 
-        {selectedRoute && sidebar === false && (
+        {selectedRoute && sidebar === false && mapData.isSuccess && (
           <div className="absolute bottom-3 left-3 z-[500] glass-strong rounded-xl px-3 py-2 pointer-events-none flex items-center gap-2 max-w-[calc(100%-7rem)]">
             <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: safeRouteColor(selectedRoute) }} />
-            <span className="text-xs font-medium text-ink truncate">{selectedRoute.route_short_name ?? selectedRoute.route_id} · {mapData.data?.stops.length ?? 0} stops · solid outbound / dashed return</span>
+            <span className="text-xs font-medium text-ink truncate">{selectedRoute.route_short_name ?? selectedRoute.route_id} · {visibleStopCount} stops · solid outbound / dashed return</span>
           </div>
         )}
 
         {mapData.isFetching && (
-          <div className="absolute bottom-3 right-14 z-[500] glass-strong rounded-lg px-3 py-2 flex items-center gap-2">
+          <div aria-live="polite" className="absolute bottom-3 right-14 z-[500] glass-strong rounded-lg px-3 py-2 flex items-center gap-2">
             <Loader2 size={13} className="text-beige animate-spin" />
             <span className="text-xs text-ink-muted">Loading route…</span>
           </div>
@@ -214,14 +222,14 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
       </div>
 
       {sidebar && (
-        <div className="w-full lg:w-[340px] glass rounded-[1.35rem] flex flex-col overflow-hidden">
+        <div className="w-full h-[520px] lg:h-auto lg:w-[340px] glass rounded-[1.35rem] flex flex-col overflow-hidden">
           <div className="p-5 border-b border-white/[0.06]">
             <p className="page-kicker mb-2">Route directory</p>
             <h1 className="text-xl font-semibold text-ink font-display tracking-[-0.035em]">Trace a corridor</h1>
             <p className="text-xs text-ink-muted mt-1 mb-4">Select a route to inspect its real service path.</p>
             <div className="relative">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-dim pointer-events-none" />
-              <input type="text" placeholder="Search routes…" value={search} onChange={(event) => setSearch(event.target.value)} className="w-full bg-black/15 border border-white/[0.08] rounded-xl pl-9 pr-3 py-2.5 text-sm text-ink placeholder-ink-dim focus:outline-none focus:border-beige/40 transition-colors" />
+              <input type="search" name="route-search" aria-label="Search Transjakarta routes" autoComplete="off" placeholder="Search routes…" value={search} onChange={(event) => setSearch(event.target.value)} className="w-full bg-black/15 border border-white/[0.08] rounded-xl pl-9 pr-3 py-2.5 text-sm text-ink placeholder-ink-dim focus:outline-none focus:border-beige/40 transition-colors" />
             </div>
           </div>
 
@@ -232,7 +240,7 @@ export default function MapView({ heightClass = DEFAULT_HEIGHT, sidebar = true, 
             {filtered.map((route) => {
               const active = effectiveSelected === route.route_id;
               return (
-                <button key={route.route_id} onClick={() => handleSelect(route)} className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all duration-200 hover:translate-x-0.5 ${active ? 'bg-beige/[0.08] border border-beige/25' : 'hover:bg-white/[0.04] border border-transparent'}`}>
+                <button key={route.route_id} onClick={() => handleSelect(route)} className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-[transform,background-color,border-color] duration-200 hover:translate-x-0.5 ${active ? 'bg-beige/[0.08] border border-beige/25' : 'hover:bg-white/[0.04] border border-transparent'}`}>
                   <div className="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 text-graphite" style={{ backgroundColor: safeRouteColor(route) }}>{route.route_short_name?.slice(0, 3) ?? '?'}</div>
                   <div className="flex-1 min-w-0"><p className="text-sm font-medium text-ink truncate">{route.route_long_name || route.route_short_name || route.route_id}</p><p className="text-[11px] text-ink-dim truncate font-mono">{route.route_id}</p></div>
                   <ChevronRight size={13} className="text-ink-dim shrink-0" />

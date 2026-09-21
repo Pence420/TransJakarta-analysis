@@ -81,4 +81,4 @@ Semua response pakai Pydantic models, jadi kontrak API eksplisit dan gak bocorin
 
 ## Next
 
-Lanjut ke **Fase 6b: Frontend** — React + MapLibre + Recharts dashboard.
+Lanjut ke **Fase 6b: Frontend** — React + Leaflet + Recharts dashboard.

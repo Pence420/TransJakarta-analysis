@@ -19,7 +19,7 @@ export default function KpiCard({ item, delay = 0, compact = false }: { item: Kp
   if (compact) {
     return (
       <div
-        className="glass rounded-xl p-3.5 hover:bg-card-hover hover:-translate-y-0.5 transition-all duration-300 animate-fade-up flex items-start gap-3"
+        className="glass rounded-xl p-3.5 hover:bg-card-hover hover:-translate-y-0.5 transition-[transform,background-color,border-color] duration-300 animate-fade-up flex items-start gap-3"
         style={{ animationDelay: `${delay}ms` }}
       >
         <div className="w-7 h-7 rounded-lg bg-beige/10 ring-1 ring-beige/10 flex items-center justify-center mt-0.5 shrink-0">
@@ -38,7 +38,7 @@ export default function KpiCard({ item, delay = 0, compact = false }: { item: Kp
 
   return (
     <div
-      className="glass rounded-2xl p-4 sm:p-5 hover:bg-card-hover hover:-translate-y-0.5 transition-all duration-300 animate-fade-up flex flex-col gap-4"
+      className="glass rounded-2xl p-4 sm:p-5 hover:bg-card-hover hover:-translate-y-0.5 transition-[transform,background-color,border-color] duration-300 animate-fade-up flex flex-col gap-4"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center gap-2.5">

@@ -66,15 +66,15 @@ using it because its `LIMIT 1` query cannot faithfully represent a route.
 
 ## Map rendering
 
-MapLibre renders a Jakarta road basemap. The renderer receives route shapes and
-stops as two GeoJSON source collections:
+Leaflet renders a Jakarta road basemap. The renderer receives route shapes and
+stops from the map-specific API response:
 
-- `route-shapes`: each shape is a LineString feature with `direction_id` and
-  `shape_id` properties. A dark casing keeps the route legible over roads;
+- Each shape becomes a native Leaflet polyline with its `direction_id` and
+  `shape_id`. A dark casing keeps the route legible over roads;
   direction 0 uses the route color and direction 1 uses the same color with a
   dashed or reduced-opacity treatment.
-- `route-stops`: each stop is a Point feature. Circle markers scale down at
-  lower zoom, retain a high-contrast outline, and are clickable.
+- Each stop becomes a native Leaflet circle marker with a high-contrast outline
+  and a clickable popup.
 
 The default camera is Jakarta. After a route is selected, `fitBounds` uses all
 coordinates returned in `map-data`, with responsive padding. The selected route
@@ -93,7 +93,7 @@ renders the selected route and stops.
 - A compact searchable route selector lives at the top of the map.
 - A contextual legend appears only after route geometry loads; it identifies
   the selected corridor, direction treatment, and displayed stop count.
-- Clicking a stop opens a MapLibre popup with stop name and optional stop code.
+- Clicking a stop opens a Leaflet popup with stop name and optional stop code.
 - Shape/stops loading uses an inline map status chip. Route requests can be
   retried without reloading the page.
 - The current hand-drawn SVG `map-fallback` is removed. No fake map roads,
@@ -107,7 +107,7 @@ renders the selected route and stops.
   response.
 - `api/routes.py`: one database query boundary for `map-data`.
 - `frontend/src/lib/types.ts` and `api.ts`: matching client contract.
-- `frontend/src/components/MapView.tsx`: owns MapLibre lifecycle, source/layer
+- `frontend/src/components/MapView.tsx`: owns Leaflet lifecycle, layer
   updates, selector, popup, and tile/route error state. It contains no SQL or
   dashboard metric calculations.
 - `frontend/src/pages/OverviewPage.tsx`: selects the default route using the

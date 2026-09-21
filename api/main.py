@@ -45,16 +45,6 @@ async def psycopg2_exception_handler(request: Request, exc: psycopg2.Error):
     return JSONResponse(status_code=500, content={"detail": "Database error"})
 
 
-@app.exception_handler(404)
-async def custom_404_handler(request: Request, exc):
-    return JSONResponse(status_code=404, content={"detail": "Not found"})
-
-
-@app.exception_handler(422)
-async def custom_422_handler(request: Request, exc):
-    return JSONResponse(status_code=422, content={"detail": "Validation error"})
-
-
 @app.get("/", include_in_schema=False)
 @limiter.limit("30/minute")
 async def root(request: Request):

@@ -74,7 +74,7 @@ export default function AboutPage() {
             <div className="mini-road road-a" /><div className="mini-road road-b" /><div className="mini-road road-c" />
             <svg viewBox="0 0 500 240"><path d="M-20 215 C95 170 100 80 205 105 S315 205 535 20" /><path className="return" d="M-10 228 C105 184 110 94 211 118 S325 216 545 32" /></svg>
             <i className="stop-one" /><i className="stop-two" /><i className="stop-three" /><i className="stop-four" />
-            <span className="map-tag"><Map size={12} /> Live corridor geometry</span>
+            <span className="map-tag"><Map size={12} /> Spatial model preview</span>
           </div>
         </article>
 

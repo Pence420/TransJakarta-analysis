@@ -70,10 +70,12 @@ return Array.from({ length: 21 }, (_, i) => i + 4).map((hour) => {
         subtitle="Time gaps between consecutive departures across corridors — the heartbeat of the network."
         trailing={
           <div className="glass rounded-xl px-3.5 py-3 min-w-[230px]">
-            <div className="flex items-center gap-2 panel-label mb-1.5">
+            <label htmlFor="headway-route" className="flex items-center gap-2 panel-label mb-1.5">
               <Filter size={12} /> Route
-            </div>
+            </label>
             <select
+              id="headway-route"
+              name="headway-route"
               value={routeFilter}
               onChange={(e) => setRouteFilter(e.target.value)}
               className="w-full bg-transparent text-sm font-medium text-ink focus:outline-none"

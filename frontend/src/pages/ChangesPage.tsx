@@ -19,7 +19,7 @@ function ChangeCard({ change, type }: { change: Change; type: string }) {
   const s = STATUS[change.change_type];
   const Icon = s.icon;
   return (
-    <article className="glass rounded-xl p-4 sm:p-5 hover:bg-card-hover hover:-translate-y-0.5 transition-all duration-300 flex gap-3.5 animate-fade-up">
+    <article className="glass rounded-xl p-4 sm:p-5 hover:bg-card-hover hover:-translate-y-0.5 transition-[transform,background-color,border-color] duration-300 flex gap-3.5 animate-fade-up">
       <div className="w-9 h-9 rounded-lg ring-1 ring-white/[0.05] flex items-center justify-center shrink-0 mt-0.5" style={{ background: s.bg }}>
         <Icon size={15} style={{ color: s.color }} />
       </div>
@@ -102,8 +102,10 @@ export default function ChangesPage() {
 
       <section className="glass rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4" aria-label="Feed comparison controls">
         <div className="flex-1">
-          <div className="panel-label mb-2">Choose feed version</div>
+          <label htmlFor="feed-version" className="panel-label block mb-2">Choose feed version</label>
           <select
+            id="feed-version"
+            name="feed-version"
             value={version ?? ''}
             onChange={(e) => handleVersionChange(e.target.value)}
             className="w-full rounded-xl bg-black/15 border border-white/[0.07] px-3 py-2.5 text-sm font-medium text-ink focus:outline-none"
@@ -119,14 +121,14 @@ export default function ChangesPage() {
         {version && (
           <div className="md:w-auto">
             <span className="panel-label block mb-2">Change type</span>
-            <div className="flex gap-1.5">
+            <div className="flex gap-1.5" role="group" aria-label="Filter by change type">
             {(['', 'ADDED', 'REMOVED', 'MODIFIED'] as const).map((t) => {
               const s = t ? STATUS[t] : null;
               return (
                 <button
                   key={t}
                   onClick={() => setFilter(t)}
-                  className={`px-3 py-2 rounded-lg text-[11px] font-semibold transition-all active:scale-[0.98] ${
+                  className={`px-3 py-2 rounded-lg text-[11px] font-semibold transition-[transform,background-color,color,border-color] active:scale-[0.98] ${
                     filter === t
                       ? 'bg-beige/15 text-beige border border-beige/30'
                       : 'glass text-ink-dim hover:text-ink border border-transparent'

@@ -1,122 +1,91 @@
-# Fase 6b: Frontend (React + MapLibre + Recharts)
+# Fase 6b: Frontend (React + Leaflet + Recharts)
 
-## Apa yang Dikerjain
+## Ringkasan
 
-Fase ini bikin **interactive dashboard** dengan peta, chart, dan card grid untuk visualisasi data Transjakarta GTFS.
-
-## Design
-
-**Dihadaptasi dari [KOI Thé](https://www.koithe.com/en/main.php):**
-- Floating pill navigation dengan icon buttons
-- Clean light mode dengan generous whitespace
-- Card-based content dengan rounded corners (16px)
-- Glass-morphism effect pada nav
-- Subtle shadows dan hover transitions
+Frontend adalah dashboard responsif untuk membaca hasil pipeline GTFS: network overview, peta koridor Jakarta, analisis headway, perubahan antar feed, dan penjelasan arsitektur project.
 
 ## Tech Stack
 
-- **Vite + React 18 + TypeScript**
-- **MapLibre GL JS** — WebGL map rendering
-- **Recharts** — Bar charts
-- **TanStack Query** — Data fetching & caching
-- **React Router v6** — Page routing
-- **Tailwind CSS** — Styling
-- **Lucide React** — Icons
+- React 19 + TypeScript
+- Vite
+- React Router
+- TanStack Query
+- Leaflet
+- Recharts
+- Tailwind CSS v4
+- Lucide React
 
-## File Structure
+## Halaman
 
-```
-frontend/
-├── src/
-│   ├── main.tsx              # Entry point
-│   ├── App.tsx               # Router + providers
-│   ├── index.css             # Tailwind + theme
-│   ├── api/
-│   │   └── client.ts         # API fetch functions
-│   ├── components/
-│   │   ├── Layout.tsx        # Main layout wrapper
-│   │   ├── TopNav.tsx        # Floating pill navigation
-│   │   ├── MapPanel.tsx      # MapLibre map
-│   │   ├── MetricCard.tsx    # Reusable metric card
-│   │   ├── ChartCard.tsx     # Chart wrapper
-│   │   ├── DataTable.tsx     # Sortable table
-│   │   └── LoadingState.tsx  # Loading spinner
-│   ├── pages/
-│   │   ├── RoutesPage.tsx    # Map + route list
-│   │   ├── HeadwayPage.tsx   # Headway charts
-│   │   ├── CoveragePage.tsx  # Coverage by zone
-│   │   ├── ChangesPage.tsx   # Feed changes card grid
-│   │   └── AboutPage.tsx     # Project info
-│   └── types/
-│       └── index.ts          # TypeScript types
-├── index.html
-├── package.json
-├── tailwind.config.js
-├── vite.config.ts
-└── tsconfig.json
+| Route | Fungsi |
+| --- | --- |
+| `/` | Overview jaringan, service window, headway, dan map utama |
+| `/map` | Peta interaktif dengan directory seluruh koridor |
+| `/headway` | Analisis interval keberangkatan per jam dan route |
+| `/changes` | Perubahan route, stop, dan schedule antar feed version |
+| `/about` | Landing page produk dan arsitektur data |
+
+Island navigation tetap tersedia pada semua halaman. Layout menggunakan palette graphite, warm cream, dan sage dengan fokus pada data density serta keterbacaan.
+
+## Peta
+
+`src/components/MapView.tsx` mengelola lifecycle Leaflet, tile basemap, native pan/zoom/pinch, route polylines, stop markers, popup, route selector, dan error state.
+
+Data geografi berasal dari:
+
+```text
+GET /api/routes/{route_id}/map-data
 ```
 
-## Cara Jalankan
+Setiap GTFS shape digambar dalam koordinat Jakarta asli. Direction utama memakai garis solid dan direction sebaliknya memakai garis putus-putus. Stop yang tampil dapat diklik untuk membaca nama dan kode halte.
+
+Tile default menggunakan OpenStreetMap untuk development. Deployment dapat mengganti provider tanpa mengubah komponen:
 
 ```bash
-# Development
+VITE_MAP_TILE_URL=https://provider.example/{z}/{x}/{y}.png
+VITE_MAP_TILE_ATTRIBUTION="&copy; Provider"
+```
+
+## Struktur Utama
+
+```text
+frontend/src/
+├── components/
+│   ├── IslandNav.tsx
+│   ├── Layout.tsx
+│   ├── MapView.tsx
+│   ├── DataTable.tsx
+│   └── LoadingState.tsx
+├── lib/
+│   ├── api.ts
+│   ├── format.ts
+│   └── types.ts
+├── pages/
+│   ├── OverviewPage.tsx
+│   ├── NetworkPage.tsx
+│   ├── HeadwayPage.tsx
+│   ├── ChangesPage.tsx
+│   └── AboutPage.tsx
+├── App.tsx
+├── index.css
+└── main.tsx
+```
+
+## Menjalankan Frontend
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
-# Build production
+Vite berjalan di `http://127.0.0.1:5173` dan mem-proxy `/api` ke FastAPI pada port `8000`.
+
+## Quality Checks
+
+```bash
+npm run lint
 npm run build
-# Output: dist/
 ```
 
-Dev server: `http://localhost:5173` (auto-proxy `/api` ke `http://localhost:8000`)
-
-## Pages
-
-### Routes (`/`)
-- Peta MapLibre dengan stop markers
-- Route list cards (klik untuk highlight di peta)
-- Metric cards: total routes, total stops
-
-### Headway (`/headway`)
-- Bar chart headway per jam
-- Filter per route
-- Tabel detail: avg, min, max headway
-
-### Coverage (`/coverage`)
-- Bar chart stops per zone
-- Horizontal bar chart service hours per route
-- Zone cards: total stops, unique stations
-
-### Changes (`/changes`)
-- Select feed version
-- Summary cards: ADDED (hijau), REMOVED (merah), MODIFIED (kuning)
-- Card grid perubahan dengan before/after values
-
-### About (`/about`)
-- Feature cards
-- Tech stack
-- Architecture principles (9 principles)
-
-## Color Palette
-
-```
-Primary:    #003478 (biru Transjakarta)
-Background: #F8F9FA
-Surface:    #FFFFFF
-Border:     #E8EAED
-Text:       #1A1A2E
-Muted:      #6B7280
-Success:    #2E7D32 (ADDED)
-Danger:     #C62828 (REMOVED)
-Warning:    #E65100 (MODIFIED)
-```
-
-## Key Features
-
-- **Floating pill nav** — glass-morphism effect, icon-only
-- **MapLibre GL** — WebGL rendering, performa untuk ribuan markers
-- **TanStack Query** — caching, auto-refetch, loading states
-- **Gradient charts** — Recharts dengan gradient fills
-- **Card grid changes** — colored badges per change type
-- **Responsive** — mobile-friendly layout
+UI menyediakan skip link, keyboard focus state, reduced-motion fallback, form labels, loading/error states, serta layout peta terpisah untuk desktop dan mobile.

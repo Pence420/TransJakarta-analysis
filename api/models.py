@@ -1,6 +1,12 @@
 from datetime import datetime
+from typing import Annotated
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+Longitude = Annotated[float, Field(ge=-180, le=180)]
+Latitude = Annotated[float, Field(ge=-90, le=90)]
+RouteCoordinate = tuple[Longitude, Latitude]
 
 
 class RouteResponse(BaseModel):
@@ -30,13 +36,13 @@ class StopResponse(BaseModel):
 class RouteShapeResponse(BaseModel):
     route_id: str
     shape_id: str | None
-    coordinates: list[list[float]]
+    coordinates: list[RouteCoordinate]
 
 
 class RouteMapShape(BaseModel):
     shape_id: str
     direction_id: int | None
-    coordinates: list[list[float]]
+    coordinates: list[RouteCoordinate]
 
 
 class RouteMapStop(BaseModel):
