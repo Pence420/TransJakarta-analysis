@@ -240,4 +240,4 @@ transjakarta/
 
 ## License
 
-Personal portfolio project. Add a formal license before accepting external contributions or redistribution.
+Personal portfolio project.
