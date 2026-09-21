@@ -28,6 +28,27 @@ export interface RouteShape {
   coordinates: [number, number][];
 }
 
+export interface RouteMapShape {
+  shape_id: string;
+  direction_id: number | null;
+  coordinates: [number, number][];
+}
+
+export interface RouteMapStop {
+  stop_id: string;
+  stop_code: string | null;
+  stop_name: string | null;
+  stop_lat: number;
+  stop_lon: number;
+  location_type: number | null;
+}
+
+export interface RouteMapData {
+  route_id: string;
+  shapes: RouteMapShape[];
+  stops: RouteMapStop[];
+}
+
 export interface Coverage {
   zone_id: string;
   total_stops: number;

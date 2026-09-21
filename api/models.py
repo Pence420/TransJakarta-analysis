@@ -33,6 +33,27 @@ class RouteShapeResponse(BaseModel):
     coordinates: list[list[float]]
 
 
+class RouteMapShape(BaseModel):
+    shape_id: str
+    direction_id: int | None
+    coordinates: list[list[float]]
+
+
+class RouteMapStop(BaseModel):
+    stop_id: str
+    stop_code: str | None
+    stop_name: str | None
+    stop_lat: float
+    stop_lon: float
+    location_type: int | None
+
+
+class RouteMapDataResponse(BaseModel):
+    route_id: str
+    shapes: list[RouteMapShape]
+    stops: list[RouteMapStop]
+
+
 class CoverageResponse(BaseModel):
     zone_id: str
     total_stops: int

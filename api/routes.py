@@ -11,6 +11,7 @@ from api.models import (
     HeadwayResponse,
     PaginatedResponse,
     RouteChangeResponse,
+    RouteMapDataResponse,
     RouteResponse,
     RouteShapeResponse,
     ScheduleChangeResponse,
@@ -83,6 +84,61 @@ def get_route(request: Request, route_id: str):
                 raise HTTPException(status_code=404, detail="Route not found")
             colnames = [desc[0] for desc in cur.description]
             return dict(zip(colnames, row))
+
+
+@router.get("/routes/{route_id}/map-data", response_model=RouteMapDataResponse)
+@limiter.limit("30/minute")
+def get_route_map_data(request: Request, route_id: str):
+    """Return all active GTFS shapes and served stops for one route."""
+    _validate_id(route_id, "route_id")
+    with get_db() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT ft.shape_id, ft.direction_id, s.shape_pt_lon, s.shape_pt_lat
+                FROM (
+                    SELECT DISTINCT shape_id, direction_id
+                    FROM marts.fact_trip
+                    WHERE route_id = %s AND shape_id IS NOT NULL
+                ) ft
+                JOIN staging.shapes s ON s.shape_id = ft.shape_id
+                ORDER BY ft.direction_id NULLS LAST, ft.shape_id, s.shape_pt_sequence
+            """, (route_id,))
+            shapes: list[dict] = []
+            current_key: tuple[str, int | None] | None = None
+            current_shape: dict | None = None
+            for shape_id, direction_id, lon, lat in cur.fetchall():
+                key = (shape_id, direction_id)
+                if key != current_key:
+                    current_key = key
+                    current_shape = {"shape_id": shape_id, "direction_id": direction_id, "coordinates": []}
+                    shapes.append(current_shape)
+                current_shape["coordinates"].append([lon, lat])
+
+            shapes = [shape for shape in shapes if len(shape["coordinates"]) >= 2]
+            if not shapes:
+                raise HTTPException(status_code=404, detail="No shape found for this route")
+
+            cur.execute("""
+                SELECT DISTINCT ON (ds.stop_id)
+                    ds.stop_id, ds.stop_code, ds.stop_name, ds.stop_lat, ds.stop_lon, ds.location_type
+                FROM marts.fact_trip ft
+                JOIN staging.stop_times st
+                  ON st.trip_id = ft.trip_id AND st.feed_version_id = ft.feed_version_id
+                JOIN marts.dim_stop ds ON ds.stop_id = st.stop_id
+                WHERE ft.route_id = %s
+                  AND ds.stop_lat IS NOT NULL
+                  AND ds.stop_lon IS NOT NULL
+                ORDER BY ds.stop_id, ds.stop_name NULLS LAST
+            """, (route_id,))
+            stops = [
+                {
+                    "stop_id": row[0], "stop_code": row[1], "stop_name": row[2],
+                    "stop_lat": row[3], "stop_lon": row[4], "location_type": row[5],
+                }
+                for row in cur.fetchall()
+            ]
+
+    return RouteMapDataResponse(route_id=route_id, shapes=shapes, stops=stops)
 
 
 @router.get("/routes/{route_id}/shape", response_model=RouteShapeResponse)

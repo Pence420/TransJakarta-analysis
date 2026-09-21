@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Gauge, Map, BarChart3, MapPin, GitBranch, Info } from 'lucide-react';
+import { Gauge, Map, BarChart3, GitBranch, Info } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 interface NavItem {
@@ -12,7 +12,6 @@ const NAV: NavItem[] = [
   { path: '/', icon: Gauge, label: 'Overview' },
   { path: '/map', icon: Map, label: 'Network Map' },
   { path: '/headway', icon: BarChart3, label: 'Headway Analysis' },
-  { path: '/coverage', icon: MapPin, label: 'Network Coverage' },
   { path: '/changes', icon: GitBranch, label: 'Feed Changes' },
   { path: '/about', icon: Info, label: 'About' },
 ];

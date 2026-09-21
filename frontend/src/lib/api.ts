@@ -5,6 +5,7 @@ import type {
   Headway,
   PaginatedResponse,
   Route,
+  RouteMapData,
   RouteShape,
   ServiceSpan,
   Stop,
@@ -35,6 +36,8 @@ export const api = {
   getRoute: (id: string) => fetchJSON<Route>(`${BASE}/routes/${id}`),
 
   getRouteShape: (id: string) => fetchJSON<RouteShape>(`${BASE}/routes/${id}/shape`),
+
+  getRouteMapData: (id: string) => fetchJSON<RouteMapData>(`${BASE}/routes/${id}/map-data`),
 
   getStops: (limit = 100, offset = 0, zoneId?: string) => {
     const q = params({ limit, offset, zone_id: zoneId });

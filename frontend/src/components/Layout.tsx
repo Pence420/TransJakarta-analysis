@@ -22,7 +22,7 @@ export default function Layout() {
       <footer className="relative border-t border-white/[0.06] py-5">
         <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3 text-[11px] text-ink-dim">
           <p className="font-mono">TRANSJAKARTA / NETWORK INTELLIGENCE</p>
-          <p>PostgreSQL · FastAPI · React · MapLibre</p>
+          <p>PostgreSQL · FastAPI · React · Leaflet</p>
         </div>
       </footer>
     </div>

@@ -1,135 +1,126 @@
-import { Database, ShieldCheck, GitBranch, BarChart3, Map, Zap, Layers, Lock, Activity, Server, Network, FileSearch } from 'lucide-react';
-
-const FEATURES = [
-  { icon: Database, title: 'GTFS Pipeline', desc: 'Automated extract, load, and transform of official Transjakarta GTFS data.' },
-  { icon: GitBranch, title: 'CDC Diff Engine', desc: 'Change detection between feed versions with before/after tracking.' },
-  { icon: BarChart3, title: 'Analytics Marts', desc: 'Headway analysis, coverage metrics, and service span calculations.' },
-  { icon: Map, title: 'Interactive Map', desc: '240+ corridors traced on MapLibre GL with route selection.' },
-  { icon: ShieldCheck, title: 'Security First', desc: 'Read-only API, rate limiting, input validation, role-based access.' },
-  { icon: Zap, title: 'FastAPI Serving', desc: 'Parameterized REST endpoints with pagination and filtering.' },
-];
-
-const TECH = [
-  { name: 'PostgreSQL', role: 'Primary database with 4-schema architecture', icon: Database },
-  { name: 'PostGIS', role: 'Spatial extensions for network coordinates', icon: Globe2Mark },
-  { name: 'Python', role: 'ETL pipeline, CDC engine, API layer', icon: Server },
-  { name: 'FastAPI', role: 'Read-only REST API with rate limiting', icon: Zap },
-  { name: 'React', role: 'Modern SPA with TypeScript & TanStack Query', icon: Network },
-  { name: 'MapLibre GL', role: 'WebGL map rendering for route visualization', icon: Map },
-  { name: 'Recharts', role: 'Responsive data visualization charts', icon: BarChart3 },
-  { name: 'Tailwind CSS', role: 'Utility-first styling on a graphite theme', icon: Layers },
-];
+import { useQuery } from '@tanstack/react-query';
+import {
+  Activity, ArrowDown, ArrowRight, BarChart3, Braces, Check, Database,
+  FileSearch, GitCompareArrows, Layers3, Map, Radio, Route, Server, ShieldCheck,
+  Sparkles, Waypoints,
+} from 'lucide-react';
+import { api } from '../lib/api';
+import { formatNumber } from '../lib/format';
 
 const PRINCIPLES = [
-  'Choose common components wisely',
-  'Plan for failure',
-  'Architect for scalability',
-  'Architecture is leadership',
-  'Always be architecting',
-  'Build loosely coupled systems',
-  'Make reversible decisions',
-  'Prioritize security',
-  'Embrace FinOps',
+  ['01', 'Observable by default', 'Every feed transition stays inspectable, measurable, and easy to explain.'],
+  ['02', 'Geography stays truthful', 'Routes and stops keep their real Jakarta coordinates from source to screen.'],
+  ['03', 'Safe to explore', 'Read-only serving and constrained queries protect the operational data layer.'],
+  ['04', 'Built for change', 'Versioned feeds and CDC make network evolution part of the product, not an afterthought.'],
 ];
 
-function Globe2Mark() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-beige">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M2 12h20" />
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </svg>
-  );
-}
-
 export default function AboutPage() {
+  const routes = useQuery({ queryKey: ['about-routes-count'], queryFn: () => api.getRoutes(1, 0) });
+  const stops = useQuery({ queryKey: ['about-stops-count'], queryFn: () => api.getStops(1, 0) });
+  const versions = useQuery({ queryKey: ['about-feed-versions'], queryFn: () => api.getFeedVersions() });
+
+  const proof = [
+    { value: routes.data ? formatNumber(routes.data.total) : '—', label: 'mapped corridors' },
+    { value: stops.data ? formatNumber(stops.data.total) : '—', label: 'network stops' },
+    { value: versions.data ? formatNumber(versions.data.length) : '—', label: 'feed snapshots' },
+    { value: '04', label: 'data layers' },
+  ];
+
   return (
-    <div className="space-y-10 pb-8">
-      <header className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-8 items-end border-b border-white/[0.07] pb-8">
-        <div>
-          <p className="page-kicker mb-3">System brief / 01</p>
-          <h1 className="font-display text-4xl sm:text-5xl font-semibold tracking-[-0.07em] text-ink text-balance">
-            Transjakarta <span className="text-beige">Network Intelligence</span>
-          </h1>
-          <p className="text-sm sm:text-base text-ink-muted max-w-2xl mt-4 leading-relaxed">
-            A data engineering pipeline that turns raw GTFS feeds into live operations insight for Jakarta’s bus rapid transit network.
-          </p>
-        </div>
-        <div className="glass rounded-2xl p-5">
-          <p className="panel-label mb-4">Workspace capabilities</p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-xs text-ink-muted">
-          <span className="flex items-center gap-1.5"><Activity size={13} className="text-sage" /> Live data</span>
-          <span className="w-1 h-1 rounded-full bg-white/15" />
-          <span className="flex items-center gap-1.5"><Lock size={13} className="text-beige" /> Read-only API</span>
-          <span className="w-1 h-1 rounded-full bg-white/15" />
-          <span className="flex items-center gap-1.5"><Layers size={13} className="text-beige" /> 4-schema model</span>
-          <span className="w-1 h-1 rounded-full bg-white/15" />
-          <span className="flex items-center gap-1.5"><FileSearch size={13} className="text-beige" /> CDC change tracking</span>
+    <div className="about-landing pb-10">
+      <section className="about-hero">
+        <div className="about-hero-copy">
+          <div className="about-eyebrow"><span className="pulse-dot" /> Jakarta transit, made legible</div>
+          <h1>From raw schedules to a <em>living network view.</em></h1>
+          <p>Transjakarta Network Intelligence connects GTFS ingestion, version history, spatial data, and operational analytics in one focused workspace.</p>
+          <div className="about-hero-signals">
+            <span><Check size={13} /> Real route geometry</span>
+            <span><Check size={13} /> Read-only serving</span>
+            <span><Check size={13} /> Change-aware data</span>
           </div>
         </div>
-      </header>
 
-      <section>
-        <div className="flex items-end justify-between gap-5 mb-5">
-          <div>
-            <p className="page-kicker mb-2">What it monitors</p>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.045em] text-ink">Operational surfaces</h2>
-          </div>
-          <span className="hidden sm:block font-mono text-[10px] text-ink-dim">06 MODULES</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {FEATURES.map((f) => {
-            const Icon = f.icon;
-            return (
-              <div key={f.title} className="glass rounded-2xl p-5 hover:bg-card-hover hover:border-beige/20 hover:-translate-y-0.5 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-beige/10 ring-1 ring-beige/10 flex items-center justify-center mb-4">
-                  <Icon size={18} className="text-beige" strokeWidth={1.75} />
-                </div>
-                <h3 className="font-display text-base font-semibold tracking-[-0.025em] text-ink mb-1.5">{f.title}</h3>
-                <p className="text-xs text-ink-muted leading-relaxed">{f.desc}</p>
-              </div>
-            );
-          })}
+        <div className="about-network-visual" aria-label="Network data flow illustration">
+          <div className="network-orbit network-orbit-one" />
+          <div className="network-orbit network-orbit-two" />
+          <div className="network-core"><Route size={25} /><strong>TJ</strong><span>Network core</span></div>
+          <div className="network-node node-feed"><Radio size={15} /><span>GTFS</span></div>
+          <div className="network-node node-spatial"><Map size={15} /><span>Spatial</span></div>
+          <div className="network-node node-cdc"><GitCompareArrows size={15} /><span>CDC</span></div>
+          <div className="network-node node-api"><Braces size={15} /><span>API</span></div>
+          <svg className="network-lines" viewBox="0 0 520 430" aria-hidden="true">
+            <path d="M90 88 C150 110 175 155 240 210" />
+            <path d="M420 88 C350 115 330 165 280 210" />
+            <path d="M92 348 C160 320 178 270 240 230" />
+            <path d="M426 346 C350 320 330 270 280 230" />
+          </svg>
+          <div className="network-live"><span /> PIPELINE HEALTHY</div>
         </div>
       </section>
 
-      <section>
-        <div className="flex items-end justify-between gap-5 mb-5">
-          <div>
-            <p className="page-kicker mb-2">Architecture</p>
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.045em] text-ink">System stack</h2>
+      <section className="about-proof" aria-label="Live network facts">
+        {proof.map((item) => <div key={item.label}><strong>{item.value}</strong><span>{item.label}</span></div>)}
+      </section>
+
+      <section className="about-section-head">
+        <div><p className="page-kicker">One operating picture</p><h2>Designed around the questions operators actually ask.</h2></div>
+        <p>Not another pile of disconnected charts. Every surface follows the same network—from where a corridor runs to how its service changes over time.</p>
+      </section>
+
+      <section className="about-bento">
+        <article className="about-feature about-feature-map">
+          <div className="feature-copy"><span className="feature-number">01 / GEOGRAPHY</span><h3>See the network in its real place.</h3><p>True GTFS shapes, directional routes, stop-level detail, and native map gestures keep the picture grounded in Jakarta.</p></div>
+          <div className="mini-map" aria-hidden="true">
+            <div className="mini-road road-a" /><div className="mini-road road-b" /><div className="mini-road road-c" />
+            <svg viewBox="0 0 500 240"><path d="M-20 215 C95 170 100 80 205 105 S315 205 535 20" /><path className="return" d="M-10 228 C105 184 110 94 211 118 S325 216 545 32" /></svg>
+            <i className="stop-one" /><i className="stop-two" /><i className="stop-three" /><i className="stop-four" />
+            <span className="map-tag"><Map size={12} /> Live corridor geometry</span>
           </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {TECH.map((t) => {
-            const Icon = t.icon;
-            return (
-              <div key={t.name} className="glass rounded-xl p-4 flex items-center gap-4 hover:bg-card-hover transition-colors">
-                <div className="w-9 h-9 rounded-lg bg-beige/10 ring-1 ring-beige/10 flex items-center justify-center shrink-0">
-                  <Icon size={16} className="text-beige" strokeWidth={1.75} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-ink">{t.name}</p>
-                  <p className="text-xs text-ink-muted">{t.role}</p>
-                </div>
-              </div>
-            );
-          })}
+        </article>
+
+        <article className="about-feature about-feature-change">
+          <span className="feature-icon"><GitCompareArrows size={18} /></span>
+          <span className="feature-number">02 / CHANGE</span>
+          <h3>Know what moved between feeds.</h3>
+          <p>CDC preserves additions, removals, and modified records so each release has an explainable before and after.</p>
+          <div className="change-stack"><span><i className="add" /> Added stop <b>+18</b></span><span><i className="edit" /> Updated route <b>07</b></span><span><i className="remove" /> Removed trip <b>03</b></span></div>
+        </article>
+
+        <article className="about-feature about-feature-signal">
+          <span className="feature-icon"><Activity size={18} /></span>
+          <span className="feature-number">03 / OPERATIONS</span>
+          <h3>Turn schedules into signals.</h3>
+          <p>Headway rhythm, service span, coverage, and corridor activity become compact decisions—not spreadsheet archaeology.</p>
+          <div className="signal-bars" aria-hidden="true">{[34, 51, 47, 68, 82, 58, 91, 73, 45, 62, 38, 56].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}</div>
+        </article>
+
+        <article className="about-feature about-feature-api">
+          <div><span className="feature-number">04 / ACCESS</span><h3>A calm interface over a serious data system.</h3><p>FastAPI serves parameterized, paginated, read-only resources while the React workspace keeps exploration fast.</p></div>
+          <div className="api-window"><div><span /><span /><span /></div><code><b>GET</b> /api/routes/13/map-data</code><code><b>200</b> geometry + stops</code></div>
+        </article>
+      </section>
+
+      <section className="about-pipeline">
+        <div className="pipeline-intro"><p className="page-kicker">Architecture</p><h2>One traceable path from source to screen.</h2><p>Each layer has a clear job, which keeps the system understandable when the network—or the product—changes.</p></div>
+        <div className="pipeline-flow">
+          <div className="pipeline-step"><span><FileSearch size={17} /></span><small>01 · ingest</small><strong>Official GTFS</strong><p>Scheduled service and geometry</p></div>
+          <ArrowRight className="pipeline-arrow" size={18} /><ArrowDown className="pipeline-arrow-mobile" size={18} />
+          <div className="pipeline-step"><span><Database size={17} /></span><small>02 · model</small><strong>Postgres + PostGIS</strong><p>Layered relational and spatial data</p></div>
+          <ArrowRight className="pipeline-arrow" size={18} /><ArrowDown className="pipeline-arrow-mobile" size={18} />
+          <div className="pipeline-step"><span><Server size={17} /></span><small>03 · serve</small><strong>FastAPI</strong><p>Constrained read-only endpoints</p></div>
+          <ArrowRight className="pipeline-arrow" size={18} /><ArrowDown className="pipeline-arrow-mobile" size={18} />
+          <div className="pipeline-step"><span><Layers3 size={17} /></span><small>04 · understand</small><strong>React workspace</strong><p>Maps, analytics, and feed history</p></div>
         </div>
       </section>
 
-      <section>
-        <p className="page-kicker mb-2">Operating principles</p>
-        <h2 className="font-display text-2xl font-semibold tracking-[-0.045em] text-ink mb-5">Nine principles of good data architecture</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {PRINCIPLES.map((p, i) => (
-            <div key={p} className="glass rounded-xl px-4 py-3.5 flex items-center gap-3 hover:bg-card-hover transition-colors">
-              <span className="font-mono text-[11px] text-beige/80 w-5 shrink-0">{String(i + 1).padStart(2, '0')}</span>
-              <span className="text-sm text-ink-muted">{p}</span>
-            </div>
-          ))}
+      <section className="about-principles">
+        <div className="principles-title"><span className="feature-icon"><Sparkles size={18} /></span><p className="page-kicker">Product principles</p><h2>Useful intelligence is clear, honest, and resilient.</h2></div>
+        <div className="principles-list">
+          {PRINCIPLES.map(([number, title, description]) => <article key={number}><span>{number}</span><div><h3>{title}</h3><p>{description}</p></div><Waypoints size={16} /></article>)}
         </div>
       </section>
+
+      <footer className="about-footer"><div><ShieldCheck size={18} /><span>Built for dependable, read-only exploration</span></div><div><BarChart3 size={18} /><span>Transjakarta Network Intelligence</span></div></footer>
     </div>
   );
 }

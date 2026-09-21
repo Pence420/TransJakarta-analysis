@@ -13,7 +13,7 @@ Pipeline ini memproses data GTFS (routes, stops, trips, stop_times, shapes, cale
 - **Transform** — SQL transformations: raw → staging → marts (dimensional model)
 - **Orchestration** — Automated pipeline dengan cron scheduling
 - **API Layer** — FastAPI read-only endpoints dengan role-based access
-- **Dashboard** — React + MapLibre + Recharts interactive dashboard
+- **Dashboard** — React + Leaflet + Recharts interactive dashboard
 
 ## Arsitektur
 
@@ -37,7 +37,7 @@ Pipeline ini memproses data GTFS (routes, stops, trips, stop_times, shapes, cale
 | Backend | Python 3 (ETL scripts) |
 | API | FastAPI + Pydantic |
 | Frontend | React + Vite + TypeScript |
-| Map | MapLibre GL JS |
+| Map | Leaflet + OpenStreetMap |
 | Charts | Recharts |
 | Data Fetching | TanStack Query |
 | Styling | Tailwind CSS |
